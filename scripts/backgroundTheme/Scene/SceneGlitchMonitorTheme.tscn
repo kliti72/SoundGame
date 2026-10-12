@@ -1,0 +1,6 @@
+[gd_scene format=3 uid="uid://uyhhodkibpj6"]
+
+[ext_resource type="Script" uid="uid://d0dyunxd23pps" path="res://scripts/backgroundTheme/Script/backgroundGlitchMonitor.gd" id="1_hurog"]
+
+[node name="SceneGlitchMonitorTheme" type="Node" unique_id=550762539]
+script = ExtResource("1_hurog")

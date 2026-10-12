@@ -1,0 +1,23 @@
+[gd_scene format=3 uid="uid://ctu5tflxvtt3v"]
+
+[ext_resource type="Script" uid="uid://cxh263yvkvkhi" path="res://scripts/core/GameCorePC.gd" id="1_wm6y1"]
+[ext_resource type="PackedScene" uid="uid://cfcou3dl2fbag" path="res://scripts/backgroundTheme/Scene/SceneMoonWithCity.tscn" id="2_4ka8g"]
+[ext_resource type="PackedScene" uid="uid://dr4w2xikrexlr" path="res://scripts/backgroundTheme/Scene/SceneRedStreetCity.tscn" id="3_7ljso"]
+[ext_resource type="PackedScene" uid="uid://uyhhodkibpj6" path="res://scripts/backgroundTheme/Scene/SceneGlitchMonitorTheme.tscn" id="4_vf36u"]
+[ext_resource type="PackedScene" uid="uid://bmudy8inw01md" path="res://scripts/backgroundTheme/Scene/BackgroundForestRain.tscn" id="5_4ka8g"]
+[ext_resource type="PackedScene" uid="uid://dhg44ndqnmeo4" path="res://scripts/backgroundTheme/Scene/BackgroundGraffitiWall.tscn" id="6_7ljso"]
+
+[node name="CoreGame" type="Node2D" unique_id=39712773]
+script = ExtResource("1_wm6y1")
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="." unique_id=923086508]
+
+[node name="BackgroundCity" parent="." unique_id=305812376 instance=ExtResource("2_4ka8g")]
+
+[node name="BackgroundRedWaterScene" parent="." unique_id=1137274255 instance=ExtResource("3_7ljso")]
+
+[node name="SceneGlitchMonitorTheme" parent="." unique_id=1456825680 instance=ExtResource("4_vf36u")]
+
+[node name="BackgroundForestRain" parent="." unique_id=44597416 instance=ExtResource("5_4ka8g")]
+
+[node name="BackgroundGraffitiWall" parent="." unique_id=837288818 instance=ExtResource("6_7ljso")]

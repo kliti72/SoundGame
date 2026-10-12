@@ -1,0 +1,7 @@
+[gd_resource type="Theme" format=3 uid="uid://ct1np73j88naj"]
+
+[ext_resource type="FontFile" uid="uid://ddc2pwfrct7ga" path="res://fonts/Traptur.otf" id="1_tj1t4"]
+
+[resource]
+default_font = ExtResource("1_tj1t4")
+default_font_size = 36

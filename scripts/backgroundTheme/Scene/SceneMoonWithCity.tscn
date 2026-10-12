@@ -1,0 +1,6 @@
+[gd_scene format=3 uid="uid://cfcou3dl2fbag"]
+
+[ext_resource type="Script" uid="uid://vpoeqht5ccf5" path="res://scripts/backgroundTheme/Script/backgroundMoonWithCity.gd" id="1_cj35v"]
+
+[node name="BackgroundCity" type="Node" unique_id=305812376]
+script = ExtResource("1_cj35v")

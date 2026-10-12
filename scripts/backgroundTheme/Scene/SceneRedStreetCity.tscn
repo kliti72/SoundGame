@@ -1,0 +1,6 @@
+[gd_scene format=3 uid="uid://dr4w2xikrexlr"]
+
+[ext_resource type="Script" uid="uid://b6t5u2lji4f7" path="res://scripts/backgroundTheme/Script/backgroundRedStreetCity.gd" id="1_1yy5n"]
+
+[node name="BackgroundRedWaterScene" type="Node" unique_id=1137274255]
+script = ExtResource("1_1yy5n")

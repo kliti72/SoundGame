@@ -1,0 +1,6 @@
+[gd_scene format=3 uid="uid://bmudy8inw01md"]
+
+[ext_resource type="Script" uid="uid://bpefb36emilbg" path="res://scripts/backgroundTheme/Script/BackgroundForestRain.gd" id="1_wsrfc"]
+
+[node name="BackgroundForestRain" type="Node" unique_id=44597416]
+script = ExtResource("1_wsrfc")

@@ -1,0 +1,73 @@
+[gd_scene format=3 uid="uid://iscom8gi3lq4"]
+
+[ext_resource type="Script" uid="uid://bic7rk65kydhu" path="res://scripts/UI/BackgroundMusic.gd" id="1_0x8py"]
+[ext_resource type="Theme" uid="uid://ct1np73j88naj" path="res://theme/Trapur.tres" id="3_0x8py"]
+[ext_resource type="Script" uid="uid://umfjd67ehejx" path="res://scripts/UI/PlayingButtonStart.gd" id="4_wiyeg"]
+[ext_resource type="Texture2D" uid="uid://c4edt7k453g1e" path="res://resource/icon/headphones-xxl (1) (1).png" id="5_3lhv3"]
+[ext_resource type="Script" uid="uid://t40sirrh0ufk" path="res://scripts/Police.gd" id="5_w4cs2"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_r7t5n"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_oc2gx"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_vt4op"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_cxdxe"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_h5d40"]
+
+[node name="InitStartGame" type="Node" unique_id=1874219663]
+script = ExtResource("1_0x8py")
+
+[node name="Control" type="Control" parent="." unique_id=1948834668]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("3_0x8py")
+script = ExtResource("4_wiyeg")
+metadata/_edit_use_anchors_ = true
+
+[node name="BoxContainer" type="BoxContainer" parent="Control" unique_id=1446680273]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -72.5
+offset_top = -22.5
+offset_right = 72.5
+offset_bottom = 22.5
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="HBoxContainer" type="VBoxContainer" parent="Control/BoxContainer" unique_id=791113418]
+layout_mode = 2
+
+[node name="AzioneButton" type="Button" parent="Control/BoxContainer/HBoxContainer" unique_id=311491218]
+layout_mode = 2
+text = "Start Game"
+flat = true
+
+[node name="Cuffie Icon & Text" type="Button" parent="Control/BoxContainer/HBoxContainer" unique_id=457564669]
+layout_mode = 2
+offset_transform_enabled = true
+theme_override_styles/normal = SubResource("StyleBoxEmpty_r7t5n")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_oc2gx")
+theme_override_styles/hover = SubResource("StyleBoxEmpty_vt4op")
+theme_override_styles/disabled = SubResource("StyleBoxEmpty_cxdxe")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_h5d40")
+disabled = true
+text = "Use THIS"
+icon = ExtResource("5_3lhv3")
+flat = true
+
+[node name="Control2" type="Control" parent="." unique_id=714002667]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+script = ExtResource("5_w4cs2")

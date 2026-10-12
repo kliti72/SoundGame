@@ -1,0 +1,112 @@
+[gd_scene format=3 uid="uid://dh0d7kys2jold"]
+
+[ext_resource type="Script" uid="uid://dtiqgcl0cpvq2" path="res://scripts/UI/GameSongSelectorManager.gd" id="1_6uq70"]
+[ext_resource type="Theme" uid="uid://ct1np73j88naj" path="res://theme/Trapur.tres" id="1_d8hw3"]
+[ext_resource type="Texture2D" uid="uid://chmbrquiwigok" path="res://resource/images/Tunnel_0.png" id="3_xjwt6"]
+[ext_resource type="PackedScene" uid="uid://cfcou3dl2fbag" path="res://scripts/backgroundTheme/Scene/SceneMoonWithCity.tscn" id="4_ltvke"]
+[ext_resource type="PackedScene" uid="uid://dr4w2xikrexlr" path="res://scripts/backgroundTheme/Scene/SceneRedStreetCity.tscn" id="5_dq1gj"]
+[ext_resource type="PackedScene" uid="uid://uyhhodkibpj6" path="res://scripts/backgroundTheme/Scene/SceneGlitchMonitorTheme.tscn" id="6_gui8b"]
+[ext_resource type="PackedScene" uid="uid://bmudy8inw01md" path="res://scripts/backgroundTheme/Scene/BackgroundForestRain.tscn" id="7_gui8b"]
+
+[node name="SongList" type="Node" unique_id=19369253]
+script = ExtResource("1_6uq70")
+metadata/_edit_vertical_guides_ = [-85.0]
+
+[node name="Control" type="Control" parent="." unique_id=858084763]
+z_index = 4096
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("1_d8hw3")
+
+[node name="VBoxContainer" type="HBoxContainer" parent="Control" unique_id=2045478728]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="CanzonePrecedente" type="Button" parent="Control/VBoxContainer" unique_id=1415913552]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "BACK"
+flat = true
+
+[node name="CenterContainer" type="CenterContainer" parent="Control/VBoxContainer" unique_id=276214153]
+z_index = -300
+propagate_maximum_size = false
+layout_mode = 2
+accessibility_region = true
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Control/VBoxContainer/CenterContainer" unique_id=2129248771]
+layout_mode = 2
+
+[node name="ProgressBar" type="ProgressBar" parent="Control/VBoxContainer/CenterContainer/VBoxContainer" unique_id=1308544360]
+layout_mode = 2
+
+[node name="testoProgresso" type="Label" parent="Control/VBoxContainer/CenterContainer/VBoxContainer" unique_id=2028367747]
+layout_mode = 2
+
+[node name="TextureRect" type="TextureRect" parent="Control/VBoxContainer/CenterContainer/VBoxContainer" unique_id=87801007]
+custom_minimum_size = Vector2(330, 330)
+custom_maximum_size = Vector2(330, 330)
+layout_mode = 2
+texture = ExtResource("3_xjwt6")
+
+[node name="MarginContainer" type="MarginContainer" parent="Control/VBoxContainer/CenterContainer/VBoxContainer/TextureRect" unique_id=1858581179]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 10
+
+[node name="SongTitle" type="Label" parent="Control/VBoxContainer/CenterContainer/VBoxContainer/TextureRect/MarginContainer" unique_id=1254667399]
+custom_minimum_size = Vector2(330, 0)
+layout_mode = 2
+text = "Caricamento.."
+autowrap_mode = 3
+
+[node name="StartTrapSong" type="Button" parent="Control/VBoxContainer/CenterContainer/VBoxContainer" unique_id=1725919161]
+custom_minimum_size = Vector2(330, 0)
+custom_maximum_size = Vector2(330, -1)
+layout_mode = 2
+size_flags_stretch_ratio = 86.92
+theme_override_font_sizes/font_size = 50
+text = "PLAY THIS SONG"
+
+[node name="ProssimaCanzone" type="Button" parent="Control/VBoxContainer" unique_id=1499635799]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "NEXT"
+flat = true
+
+[node name="MarginContainer" type="MarginContainer" parent="Control" unique_id=1717887320]
+layout_mode = 1
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -70.0
+grow_horizontal = 2
+grow_vertical = 0
+
+[node name="Label" type="Label" parent="Control/MarginContainer" unique_id=2011094315]
+layout_mode = 2
+size_flags_stretch_ratio = 12.53
+theme_override_font_sizes/font_size = 25
+text = "LEFT | RIGHT"
+horizontal_alignment = 1
+
+[node name="BackgroundRedWaterScene" parent="." unique_id=1137274255 instance=ExtResource("5_dq1gj")]
+
+[node name="SceneGlitchMonitorTheme" parent="." unique_id=550762539 instance=ExtResource("6_gui8b")]
+
+[node name="BackgroundCity" parent="." unique_id=305812376 instance=ExtResource("4_ltvke")]
+
+[node name="BackgroundForestRain" parent="." unique_id=44597416 instance=ExtResource("7_gui8b")]

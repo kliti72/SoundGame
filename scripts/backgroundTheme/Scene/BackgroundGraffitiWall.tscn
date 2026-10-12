@@ -1,0 +1,6 @@
+[gd_scene format=3 uid="uid://dhg44ndqnmeo4"]
+
+[ext_resource type="Script" uid="uid://daegfb2t4pvqx" path="res://scripts/backgroundTheme/Script/background_graffiti_wall.gd" id="1_186vi"]
+
+[node name="BackgroundGraffitiWall" type="Node" unique_id=837288818]
+script = ExtResource("1_186vi")

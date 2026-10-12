@@ -1,0 +1,8 @@
+[gd_scene format=3 uid="uid://12pvensaaqlv"]
+
+[ext_resource type="Script" uid="uid://c0g775wl6aawj" path="res://developer/script/dev_ConfigureSong.gd" id="1_jfm8n"]
+
+[node name="CreateSong" type="Node2D" unique_id=225801207]
+script = ExtResource("1_jfm8n")
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="." unique_id=2144304655]

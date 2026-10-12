@@ -1,0 +1,8 @@
+[gd_scene format=3 uid="uid://bhvea3d6f7ejm"]
+
+[ext_resource type="Script" uid="uid://bb12arerit348" path="res://developer/script/registra_tasti.gd" id="1_qdjyo"]
+
+[node name="DevRegistraTasti" type="Node2D" unique_id=477753187]
+script = ExtResource("1_qdjyo")
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="." unique_id=1512871244]

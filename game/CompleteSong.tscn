@@ -1,0 +1,57 @@
+[gd_scene format=3 uid="uid://bk1h11xj45s76"]
+
+[ext_resource type="Theme" uid="uid://ct1np73j88naj" path="res://theme/Trapur.tres" id="1_0kv4e"]
+[ext_resource type="Script" uid="uid://bwxe8terenwvo" path="res://scripts/core/CompleteSong.gd" id="1_0tehi"]
+[ext_resource type="PackedScene" uid="uid://uyhhodkibpj6" path="res://scripts/backgroundTheme/Scene/SceneGlitchMonitorTheme.tscn" id="1_0yhwr"]
+
+[node name="CompleteSong" type="Control" unique_id=613612034]
+layout_mode = 3
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_0tehi")
+
+[node name="BoxContainer" type="BoxContainer" parent="." unique_id=1308935575]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -60.0
+offset_top = -71.5
+offset_right = 60.0
+offset_bottom = 71.5
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("1_0kv4e")
+
+[node name="HBoxContainer" type="VBoxContainer" parent="BoxContainer" unique_id=1931850810]
+custom_minimum_size = Vector2(0.125, 0)
+layout_mode = 2
+size_flags_horizontal = 4
+
+[node name="ProgressBarMessage" type="Label" parent="BoxContainer/HBoxContainer" unique_id=211502427]
+layout_mode = 2
+size_flags_vertical = 0
+theme_override_font_sizes/font_size = 62
+text = "8 / 8 NOTES"
+horizontal_alignment = 1
+
+[node name="RetryButton" type="Button" parent="BoxContainer/HBoxContainer" unique_id=651568739]
+custom_minimum_size = Vector2(300, 150)
+layout_mode = 2
+theme_override_font_sizes/font_size = 62
+text = "RETRY"
+
+[node name="GoToMenu" type="Button" parent="BoxContainer/HBoxContainer" unique_id=1657868051]
+custom_minimum_size = Vector2(300, 100)
+layout_mode = 2
+theme_override_font_sizes/font_size = 62
+text = "GO TO MENU"
+
+[node name="SceneGlitchMonitorTheme" parent="." unique_id=550762539 instance=ExtResource("1_0yhwr")]
