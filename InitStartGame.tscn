@@ -4,7 +4,7 @@
 [ext_resource type="Theme" uid="uid://ct1np73j88naj" path="res://theme/Trapur.tres" id="3_0x8py"]
 [ext_resource type="Script" uid="uid://umfjd67ehejx" path="res://scripts/UI/PlayingButtonStart.gd" id="4_wiyeg"]
 [ext_resource type="Texture2D" uid="uid://c4edt7k453g1e" path="res://resource/icon/headphones-xxl (1) (1).png" id="5_3lhv3"]
-[ext_resource type="Script" uid="uid://t40sirrh0ufk" path="res://scripts/Police.gd" id="5_w4cs2"]
+[ext_resource type="Script" uid="uid://buo8poa3u1gqf" path="res://scripts/backgroundTheme/Script/WhiteBackground.gd" id="5_w4cs2"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_r7t5n"]
 
@@ -47,13 +47,35 @@ grow_vertical = 2
 [node name="HBoxContainer" type="VBoxContainer" parent="Control/BoxContainer" unique_id=791113418]
 layout_mode = 2
 
+[node name="GameTitle" type="Label" parent="Control/BoxContainer/HBoxContainer" unique_id=959164416]
+layout_mode = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 125
+text = "TrapMusic"
+horizontal_alignment = 1
+
 [node name="AzioneButton" type="Button" parent="Control/BoxContainer/HBoxContainer" unique_id=311491218]
 layout_mode = 2
-text = "Start Game"
+theme_override_colors/font_color = Color(0.9019608, 0.22352941, 0.27450982, 1)
+theme_override_colors/font_focus_color = Color(0.37238696, 0.048441984, 0.08119082, 1)
+theme_override_colors/font_pressed_color = Color(0.40784314, 0.05490196, 0.09019608, 1)
+theme_override_colors/font_hover_color = Color(0.40676945, 0.056754507, 0.09214278, 1)
+theme_override_colors/font_hover_pressed_color = Color(0.40784314, 0.05490196, 0.09019608, 1)
+theme_override_font_sizes/font_size = 70
+text = "PLAY"
 flat = true
 
-[node name="Cuffie Icon & Text" type="Button" parent="Control/BoxContainer/HBoxContainer" unique_id=457564669]
-layout_mode = 2
+[node name="Cuffie Icon & Text" type="Button" parent="Control" unique_id=457564669]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -98.0
+offset_top = -74.0
+grow_horizontal = 0
+grow_vertical = 0
 offset_transform_enabled = true
 theme_override_styles/normal = SubResource("StyleBoxEmpty_r7t5n")
 theme_override_styles/pressed = SubResource("StyleBoxEmpty_oc2gx")
@@ -61,9 +83,11 @@ theme_override_styles/hover = SubResource("StyleBoxEmpty_vt4op")
 theme_override_styles/disabled = SubResource("StyleBoxEmpty_cxdxe")
 theme_override_styles/focus = SubResource("StyleBoxEmpty_h5d40")
 disabled = true
-text = "Use THIS"
+text = "The use of headphones is recommended.
+"
 icon = ExtResource("5_3lhv3")
 flat = true
+alignment = 2
 
 [node name="Control2" type="Control" parent="." unique_id=714002667]
 layout_mode = 3

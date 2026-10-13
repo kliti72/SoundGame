@@ -1,20 +1,21 @@
 extends Node2D
 
 @export var canzone := "Boombap.mp3"
-@export_range(0, 3) var sfondo_uso := 0   # 0 = a caso, 1 = glitch, 2 = città luna, 3 = strada rossa
+@export_range(0, 3) var sfondo_uso := 0   
+
 
 @onready var musica: AudioStreamPlayer = $AudioStreamPlayer
 @onready var sfondi: Array = [$SceneGlitchMonitorTheme, $BackgroundCity, $BackgroundRedWaterScene, $BackgroundForestRain, $BackgroundGraffitiWall]
 
 const VELOCITA := [0.5, 0.3, 3.0, 0.5, 0.5]   # una per sfondo, nello stesso ordine
 const LETTERE := "QWERTYUIOPASDFGHJKLZXCVBNM"
-const RAGGIO := 65.0            # era 26 -> x2.5
+const RAGGIO := 65.0            
 const APPROCCIO := 1.0          # da quanto prima appare la nota (ed è già cliccabile)
 const TOLLERANZA := 0.15        # quanto dopo t la nota resta cliccabile prima del miss
 const TONI := [Color(0.92, 0.92, 0.92), Color(0.55, 0.55, 0.55), Color(0.30, 0.30, 0.30)]
 const PALETTE := [Color(1.0, 0.1, 0.15), Color(0.6, 0.2, 1.0), Color(0.1, 0.9, 1.0)]
 
-var sfondo   # quello attivo, senza tipo fisso
+var sfondo  
 var note: Array = []
 var onde: Array = []
 var tempo := 0.0
@@ -36,7 +37,7 @@ func _ready() -> void:
 	sfondo = sfondi[scelta]
 	for i in sfondi.size():
 		if i != scelta:
-			sfondi[i].queue_free()   # gli altri spariscono, niente sovrapposizioni
+			sfondi[i].queue_free()   
 	sfondo.velocita = VELOCITA[scelta]
 
 	var dati = JSON.parse_string(FileAccess.get_file_as_string("res://data/song_data.json"))

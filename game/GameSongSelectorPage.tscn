@@ -2,11 +2,23 @@
 
 [ext_resource type="Script" uid="uid://dtiqgcl0cpvq2" path="res://scripts/UI/GameSongSelectorManager.gd" id="1_6uq70"]
 [ext_resource type="Theme" uid="uid://ct1np73j88naj" path="res://theme/Trapur.tres" id="1_d8hw3"]
+[ext_resource type="Script" uid="uid://dgfx83f7xbqlc" path="res://scripts/asset/capellini_monete.gd" id="3_dq1gj"]
+[ext_resource type="Script" uid="uid://byp5wsnsmqspc" path="res://scripts/asset/rombi_rating.gd" id="3_h4mvk"]
 [ext_resource type="Texture2D" uid="uid://chmbrquiwigok" path="res://resource/images/Tunnel_0.png" id="3_xjwt6"]
-[ext_resource type="PackedScene" uid="uid://cfcou3dl2fbag" path="res://scripts/backgroundTheme/Scene/SceneMoonWithCity.tscn" id="4_ltvke"]
-[ext_resource type="PackedScene" uid="uid://dr4w2xikrexlr" path="res://scripts/backgroundTheme/Scene/SceneRedStreetCity.tscn" id="5_dq1gj"]
-[ext_resource type="PackedScene" uid="uid://uyhhodkibpj6" path="res://scripts/backgroundTheme/Scene/SceneGlitchMonitorTheme.tscn" id="6_gui8b"]
-[ext_resource type="PackedScene" uid="uid://bmudy8inw01md" path="res://scripts/backgroundTheme/Scene/BackgroundForestRain.tscn" id="7_gui8b"]
+[ext_resource type="Script" uid="uid://b4xww4q81v0pd" path="res://scripts/asset/TimbroRank.gd" id="5_n6qt4"]
+[ext_resource type="Texture2D" uid="uid://c4edt7k453g1e" path="res://resource/icon/headphones-xxl (1) (1).png" id="6_gui8b"]
+[ext_resource type="Script" uid="uid://2tri5iecdxa8" path="res://scripts/asset/Teschi.gd" id="6_h4mvk"]
+[ext_resource type="Script" uid="uid://buo8poa3u1gqf" path="res://scripts/backgroundTheme/Script/WhiteBackground.gd" id="9_n6qt4"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_h4mvk"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_n6qt4"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_dc8yc"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_acf0c"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_812s5"]
 
 [node name="SongList" type="Node" unique_id=19369253]
 script = ExtResource("1_6uq70")
@@ -22,6 +34,37 @@ grow_horizontal = 2
 grow_vertical = 2
 theme = ExtResource("1_d8hw3")
 
+[node name="MarginContainer" type="MarginContainer" parent="Control" unique_id=1717887320]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_bottom = 54.0
+grow_horizontal = 2
+theme_override_constants/margin_top = 32
+theme_override_constants/margin_right = 32
+
+[node name="VBoxContainer" type="HBoxContainer" parent="Control/MarginContainer" unique_id=302210023]
+layout_mode = 2
+size_flags_horizontal = 8
+
+[node name="MarginContainer" type="MarginContainer" parent="Control/MarginContainer/VBoxContainer" unique_id=244075980]
+layout_mode = 2
+size_flags_horizontal = 8
+size_flags_vertical = 0
+
+[node name="Control" type="Control" parent="Control/MarginContainer/VBoxContainer/MarginContainer" unique_id=523117078]
+layout_mode = 2
+size_flags_vertical = 6
+script = ExtResource("3_dq1gj")
+testo = "DP"
+
+[node name="Monete" type="Label" parent="Control/MarginContainer/VBoxContainer" unique_id=2011094315]
+layout_mode = 2
+size_flags_stretch_ratio = 12.53
+theme_override_font_sizes/font_size = 25
+text = "99999999"
+horizontal_alignment = 2
+
 [node name="VBoxContainer" type="HBoxContainer" parent="Control" unique_id=2045478728]
 layout_mode = 1
 anchors_preset = 15
@@ -33,6 +76,10 @@ grow_vertical = 2
 [node name="CanzonePrecedente" type="Button" parent="Control/VBoxContainer" unique_id=1415913552]
 layout_mode = 2
 size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.042211577, 0.0014285368, 0.0027995266, 1)
+theme_override_colors/font_focus_color = Color(0.11415794, 0.11415812, 0.114158414, 1)
+theme_override_colors/font_pressed_color = Color(0.11372549, 0.11372549, 0.11372549, 1)
+theme_override_colors/font_hover_color = Color(0.11372549, 0.11372549, 0.11372549, 1)
 text = "BACK"
 flat = true
 
@@ -45,10 +92,35 @@ accessibility_region = true
 [node name="VBoxContainer" type="VBoxContainer" parent="Control/VBoxContainer/CenterContainer" unique_id=2129248771]
 layout_mode = 2
 
-[node name="ProgressBar" type="ProgressBar" parent="Control/VBoxContainer/CenterContainer/VBoxContainer" unique_id=1308544360]
+[node name="HBoxContainer" type="HBoxContainer" parent="Control/VBoxContainer/CenterContainer/VBoxContainer" unique_id=1227038023]
 layout_mode = 2
+size_flags_vertical = 3
 
-[node name="testoProgresso" type="Label" parent="Control/VBoxContainer/CenterContainer/VBoxContainer" unique_id=2028367747]
+[node name="MarginContainer" type="MarginContainer" parent="Control/VBoxContainer/CenterContainer/VBoxContainer/HBoxContainer" unique_id=616468182]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="RombiRating" type="Control" parent="Control/VBoxContainer/CenterContainer/VBoxContainer/HBoxContainer/MarginContainer" unique_id=1130832556]
+custom_minimum_size = Vector2(248, 36)
+layout_mode = 2
+size_flags_horizontal = 6
+size_flags_vertical = 4
+script = ExtResource("3_h4mvk")
+lettera = null
+totale = 4
+altezza_rombo = 36.0
+spazio = 8.0
+
+[node name="RankTimbo" type="Control" parent="Control/VBoxContainer/CenterContainer/VBoxContainer/HBoxContainer" unique_id=1418199369]
+custom_minimum_size = Vector2(60, 40)
+layout_mode = 2
+script = ExtResource("5_n6qt4")
+larghezza = 60.0
+altezza = 40.0
+inclinazione = 0.0
+
+[node name="ProgressBar" type="ProgressBar" parent="Control/VBoxContainer/CenterContainer/VBoxContainer" unique_id=1308544360]
+visible = false
 layout_mode = 2
 
 [node name="TextureRect" type="TextureRect" parent="Control/VBoxContainer/CenterContainer/VBoxContainer" unique_id=87801007]
@@ -59,54 +131,107 @@ texture = ExtResource("3_xjwt6")
 
 [node name="MarginContainer" type="MarginContainer" parent="Control/VBoxContainer/CenterContainer/VBoxContainer/TextureRect" unique_id=1858581179]
 layout_mode = 0
-offset_right = 40.0
-offset_bottom = 40.0
+offset_right = 350.0
+offset_bottom = 69.0
 theme_override_constants/margin_left = 10
 theme_override_constants/margin_top = 10
 theme_override_constants/margin_right = 10
 theme_override_constants/margin_bottom = 10
 
-[node name="SongTitle" type="Label" parent="Control/VBoxContainer/CenterContainer/VBoxContainer/TextureRect/MarginContainer" unique_id=1254667399]
+[node name="HBoxContainer" type="VBoxContainer" parent="Control/VBoxContainer/CenterContainer/VBoxContainer/TextureRect/MarginContainer" unique_id=833596488]
+layout_mode = 2
+
+[node name="SongTitle" type="Label" parent="Control/VBoxContainer/CenterContainer/VBoxContainer/TextureRect/MarginContainer/HBoxContainer" unique_id=1254667399]
 custom_minimum_size = Vector2(330, 0)
 layout_mode = 2
+theme_override_font_sizes/font_size = 55
 text = "Caricamento.."
 autowrap_mode = 3
+
+[node name="Teschi" type="Control" parent="Control/VBoxContainer/CenterContainer/VBoxContainer/TextureRect/MarginContainer/HBoxContainer" unique_id=1786387216]
+layout_mode = 2
+script = ExtResource("6_h4mvk")
+
+[node name="MarginContainer2" type="MarginContainer" parent="Control/VBoxContainer/CenterContainer/VBoxContainer/TextureRect" unique_id=2116819337]
+layout_mode = 1
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -49.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 10
+
+[node name="VBoxContainer" type="HBoxContainer" parent="Control/VBoxContainer/CenterContainer/VBoxContainer/TextureRect/MarginContainer2" unique_id=610733335]
+layout_mode = 2
+
+[node name="testoProgresso" type="Label" parent="Control/VBoxContainer/CenterContainer/VBoxContainer/TextureRect/MarginContainer2/VBoxContainer" unique_id=1754541859]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.94369775, 0.9436977, 0.94369763, 1)
+text = "01:30"
+
+[node name="testoProgressoNascosto" type="Label" parent="Control/VBoxContainer/CenterContainer/VBoxContainer/TextureRect/MarginContainer2/VBoxContainer" unique_id=2028367747]
+layout_mode = 2
+text = "5/120"
+horizontal_alignment = 1
 
 [node name="StartTrapSong" type="Button" parent="Control/VBoxContainer/CenterContainer/VBoxContainer" unique_id=1725919161]
 custom_minimum_size = Vector2(330, 0)
 custom_maximum_size = Vector2(330, -1)
 layout_mode = 2
 size_flags_stretch_ratio = 86.92
-theme_override_font_sizes/font_size = 50
+theme_override_colors/font_color = Color(0.9019608, 0.22352941, 0.27450982, 1)
+theme_override_colors/font_focus_color = Color(0.29803923, 0.03137255, 0.05882353, 1)
+theme_override_colors/font_pressed_color = Color(0.29803923, 0.03137255, 0.05882353, 1)
+theme_override_colors/font_hover_color = Color(0.29803923, 0.03137255, 0.05882353, 1)
+theme_override_colors/icon_pressed_color = Color(0.29875568, 0.031210873, 0.057753384, 1)
+theme_override_font_sizes/font_size = 65
 text = "PLAY THIS SONG"
+flat = true
 
 [node name="ProssimaCanzone" type="Button" parent="Control/VBoxContainer" unique_id=1499635799]
 layout_mode = 2
 size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_colors/font_focus_color = Color(0.11372549, 0.11372549, 0.11372549, 1)
+theme_override_colors/font_pressed_color = Color(0.11372549, 0.11372549, 0.11372549, 1)
+theme_override_colors/font_hover_color = Color(0.11372549, 0.11372549, 0.11372549, 1)
+theme_override_colors/font_hover_pressed_color = Color(0.11372549, 0.11372549, 0.11372549, 1)
 text = "NEXT"
 flat = true
 
-[node name="MarginContainer" type="MarginContainer" parent="Control" unique_id=1717887320]
+[node name="Cuffie Icon & Text" type="Button" parent="Control" unique_id=731908939]
 layout_mode = 1
-anchors_preset = 12
+anchors_preset = 3
+anchor_left = 1.0
 anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_top = -70.0
-grow_horizontal = 2
+offset_left = -98.0
+offset_top = -74.0
+grow_horizontal = 0
 grow_vertical = 0
+offset_transform_enabled = true
+theme_override_styles/normal = SubResource("StyleBoxEmpty_h4mvk")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_n6qt4")
+theme_override_styles/hover = SubResource("StyleBoxEmpty_dc8yc")
+theme_override_styles/disabled = SubResource("StyleBoxEmpty_acf0c")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_812s5")
+disabled = true
+text = "The use of headphones is recommended.
+"
+icon = ExtResource("6_gui8b")
+flat = true
+alignment = 2
 
-[node name="Label" type="Label" parent="Control/MarginContainer" unique_id=2011094315]
-layout_mode = 2
-size_flags_stretch_ratio = 12.53
-theme_override_font_sizes/font_size = 25
-text = "LEFT | RIGHT"
-horizontal_alignment = 1
-
-[node name="BackgroundRedWaterScene" parent="." unique_id=1137274255 instance=ExtResource("5_dq1gj")]
-
-[node name="SceneGlitchMonitorTheme" parent="." unique_id=550762539 instance=ExtResource("6_gui8b")]
-
-[node name="BackgroundCity" parent="." unique_id=305812376 instance=ExtResource("4_ltvke")]
-
-[node name="BackgroundForestRain" parent="." unique_id=44597416 instance=ExtResource("7_gui8b")]
+[node name="Control2" type="Control" parent="." unique_id=342703954]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+script = ExtResource("9_n6qt4")

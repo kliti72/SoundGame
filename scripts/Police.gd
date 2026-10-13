@@ -22,7 +22,7 @@ extends Node
 @export var pixel_verticali := 120.0    # risoluzione "virtuale": più basso = pixel più grossi
 @export var terra := 0.88               # altezza (0..1) a cui poggiano le ruote
 @export var layer_scena := -2
-@export var layer_fx := -1
+@export var layer_fx := -2
 
 var combo := 0                          # lo setta la scena di gioco (più combo = più veloce, volanti più vicine)
 var viaggio := 0.0

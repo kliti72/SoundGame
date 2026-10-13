@@ -2,12 +2,11 @@ extends Node
 
 @onready var canzone_precedente: Button = $Control/VBoxContainer/CanzonePrecedente
 @onready var prossima_canzone: Button = $Control/VBoxContainer/ProssimaCanzone
-@onready var titolo_canzone: Label = $Control/VBoxContainer/CenterContainer/VBoxContainer/TextureRect/MarginContainer/SongTitle
+@onready var titolo_canzone: Label = $Control/VBoxContainer/CenterContainer/VBoxContainer/TextureRect/MarginContainer/HBoxContainer/SongTitle
 @onready var start_trap_song: Button = $Control/VBoxContainer/CenterContainer/VBoxContainer/StartTrapSong
 @onready var image_song : TextureRect = $Control/VBoxContainer/CenterContainer/VBoxContainer/TextureRect
 @onready var barra_progresso: ProgressBar = $Control/VBoxContainer/CenterContainer/VBoxContainer/ProgressBar  # adatta il percorso
-@onready var testo_progresso: Label = $Control/VBoxContainer/CenterContainer/VBoxContainer/testoProgresso      # opzionale
-
+@onready var rombi_rating : Control = $Control/VBoxContainer/CenterContainer/VBoxContainer/HBoxContainer/MarginContainer/RombiRating
 
 var viaggio := 0.0
 var mat_tunnel: ShaderMaterial
@@ -21,13 +20,13 @@ var canzoni_disponibili = [];
 var nomi_file = [];
 var page_counter = 0;
 
-
-@onready var sfondi: Array = [
-	$BackgroundCity, 
-	$SceneGlitchMonitorTheme, 
-	$BackgroundRedWaterScene,
-	$BackgroundForestRain
-	]
+#
+#@onready var sfondi: Array = [
+	#$BackgroundCity, 
+	#$SceneGlitchMonitorTheme, 
+	#$BackgroundRedWaterScene,
+	#$BackgroundForestRain
+	#]
 
 var sfondo_attivo := -1
 var sfondi_collegati := {}   # per chiamare segui_musica una volta per sfondo
@@ -74,36 +73,44 @@ func aggiorna_pagina() -> void:
 	if s != null:
 		totali = SongDB.note_di(s.file).size()
 		record = mini(s.punteggio, totali)
-	barra_progresso.visible = true
-	barra_progresso.show_percentage = false
+	barra_progresso.visible = false
+	barra_progresso.show_percentage = true
 	barra_progresso.min_value = 0
 	barra_progresso.max_value = maxi(totali, 1)
 	barra_progresso.value = record
-	testo_progresso.text = "%d / %d" % [record, totali]
-	mostra_sfondo(SongDB.sfondo_di(nomi_file[page_counter]))
+	# testo_progresso.text = "%d / %d" % [record, totali]
+	
+	var rombi := 0
+	if totali > 0:
+		rombi = floori(float(record * rombi_rating.totale) / totali)
+	rombi_rating.visible = true
+	rombi_rating.riempi(rombi)
 
 
-func mostra_sfondo(valore: int) -> void:
-	var idx := valore - 1
-	if idx < 0 or idx >= sfondi.size():
-		idx = 0   # default: il primo
-	if idx == sfondo_attivo:
-		return
-	sfondo_attivo = idx
+	#mostra_sfondo(SongDB.sfondo_di(nomi_file[page_counter]))
 
-	for i in sfondi.size():
-		var nodo: Node = sfondi[i]
-		if i == idx:
-			if nodo.get_parent() == null:
-				add_child(nodo)
-				move_child(nodo, 0)   # dietro all'interfaccia ($Control)
-		elif nodo.get_parent() == self:
-			remove_child(nodo)
 
-	var scelto: Node = sfondi[idx]
-	if scelto.has_method("segui_musica"):
-		scelto.segui_musica(MusicaGlobale.player)   # a ogni cambio, anche quando rientra
-		
+#func mostra_sfondo(valore: int) -> void:
+	#var idx := valore - 1
+	#if idx < 0 or idx >= sfondi.size():
+		#idx = 0   # default: il primo
+	#if idx == sfondo_attivo:
+		#return
+	#sfondo_attivo = idx
+
+	#for i in sfondi.size():
+		#var nodo: Node = sfondi[i]
+		#if i == idx:
+			#if nodo.get_parent() == null:
+				#add_child(nodo)
+				#move_child(nodo, 0)   # dietro all'interfaccia ($Control)
+		#elif nodo.get_parent() == self:
+			#remove_child(nodo)
+
+	#var scelto: Node = sfondi[idx]
+	#if scelto.has_method("segui_musica"):
+		#scelto.segui_musica(MusicaGlobale.player)   # a ogni cambio, anche quando rientra
+		#
 				
 func _on_next_song_pressed():
 	if page_counter >= canzoni_disponibili.size() -1:
