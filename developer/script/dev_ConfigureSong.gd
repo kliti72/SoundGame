@@ -8,10 +8,12 @@ const VELOCITA := [1.0, 0.5, 0.25]
 
 var scelta := OptionButton.new()
 var sfondo_spin := SpinBox.new()
+var prezzo_spin := SpinBox.new()
 var canzoni: Array[String] = []
 var file_canzone := ""
 var note: Array = []
 var sfondo := 1
+var prezzo := 0   # PREZZO
 var modificato := false
 var indice_velocita := 0
 var tempo := 0.0
@@ -56,6 +58,22 @@ func _ready() -> void:
 	sfondo_spin.value_changed.connect(_sfondo_cambiato)
 	add_child(sfondo_spin)
 
+	# PREZZO: selettore 0-100000 (0 = gratis)
+	var lbl_prezzo := Label.new()
+	lbl_prezzo.text = "Prezzo:"
+	lbl_prezzo.position = Vector2(720, 54)
+	add_child(lbl_prezzo)
+
+	prezzo_spin.min_value = 0
+	prezzo_spin.max_value = 100000
+	prezzo_spin.step = 1
+	prezzo_spin.rounded = true
+	prezzo_spin.value = 0
+	prezzo_spin.position = Vector2(790, 50)
+	prezzo_spin.get_line_edit().focus_mode = Control.FOCUS_NONE   # spazio non lo tocca
+	prezzo_spin.value_changed.connect(_prezzo_cambiato)
+	add_child(prezzo_spin)
+
 	conferma.dialog_text = "Cancello tutte le note di questa canzone?"
 	conferma.confirmed.connect(_reset)
 	add_child(conferma)
@@ -66,6 +84,11 @@ func _ready() -> void:
 
 func _sfondo_cambiato(v: float) -> void:
 	sfondo = int(v)
+	modificato = true
+
+
+func _prezzo_cambiato(v: float) -> void:   # PREZZO
+	prezzo = int(v)
 	modificato = true
 
 
@@ -87,6 +110,8 @@ func _apri(i: int) -> void:
 	note = SongDB.note_di(file_canzone)
 	sfondo = SongDB.sfondo_di(file_canzone)
 	sfondo_spin.set_value_no_signal(sfondo)   # non segna "modificato" al caricamento
+	prezzo = SongDB.prezzo_di(file_canzone)   # PREZZO
+	prezzo_spin.set_value_no_signal(prezzo)   # PREZZO
 	modificato = false
 	musica.pitch_scale = VELOCITA[indice_velocita]
 	musica.stream = load(SongDB.CARTELLA + file_canzone)
@@ -97,11 +122,11 @@ func _salva() -> void:
 	if not modificato or file_canzone == "":
 		return
 	var titolo: String = SongDB.trova(file_canzone).get("titolo", file_canzone.get_basename())
-	if SongDB.salva(file_canzone, titolo, note, sfondo):
+	if SongDB.salva(file_canzone, titolo, note, sfondo, prezzo):   # PREZZO
 		modificato = false
 		var i := canzoni.find(file_canzone)
 		scelta.set_item_text(i, _etichetta(i))
-		print("Salvata '%s': %d note, sfondo %d" % [titolo, note.size(), sfondo])
+		print("Salvata '%s': %d note, sfondo %d, prezzo %d" % [titolo, note.size(), sfondo, prezzo])
 
 
 func _notification(what: int) -> void:

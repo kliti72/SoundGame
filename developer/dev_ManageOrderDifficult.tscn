@@ -1,0 +1,8 @@
+[gd_scene format=3 uid="uid://coleycyhcbc0g"]
+
+[ext_resource type="Script" uid="uid://dqradysgk85x0" path="res://developer/script/dev_ManageOrderDiffucult.gd" id="1_fq8j3"]
+
+[node name="DevManageOrderDifficult" type="Control" unique_id=1397528693]
+layout_mode = 3
+anchors_preset = 0
+script = ExtResource("1_fq8j3")

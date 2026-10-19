@@ -3,12 +3,14 @@ class_name DifficoltaTeschi
 extends Control
 
 # --- stile fisso ---
-const ROSSO := Color("ffff")
-const NERO := Color("0d0d0d")
+const BIANCO := Color("000000ff")
+const VERDE_SCURO := Color("ac001bff")
+const VIOLA_SCURO := Color("ac001bff")
 const GRIGIO := Color("8c8c8c")
-const GRIGIO_DET := Color("4a4a4a")
 
-@export var totale := 3:
+const N_SPINE := 25
+
+@export var totale := 8:
 	set(v):
 		totale = maxi(v, 1)
 		livello = livello  # ri-clampa
@@ -29,6 +31,16 @@ const GRIGIO_DET := Color("4a4a4a")
 		spazio = maxf(v, 0.0)
 		_aggiorna_dimensione()
 
+@export var soglia_medio := 4:
+	set(v):
+		soglia_medio = v
+		queue_redraw()
+
+@export var soglia_difficile := 7:
+	set(v):
+		soglia_difficile = v
+		queue_redraw()
+
 func _ready() -> void:
 	_aggiorna_dimensione()
 
@@ -45,44 +57,38 @@ func _aggiorna_dimensione() -> void:
 	size = custom_minimum_size
 	queue_redraw()
 
+func _colore_livello() -> Color:
+	if livello >= soglia_difficile:
+		return VIOLA_SCURO
+	if livello >= soglia_medio:
+		return VERDE_SCURO
+	return BIANCO
+
 # --- disegno ---
 func _draw() -> void:
+	var col_attivo := _colore_livello()
 	for i in totale:
-		var cx := i * (grandezza + spazio) + grandezza / 2.0
-		var cy := grandezza / 2.0
+		var c := Vector2(i * (grandezza + spazio) + grandezza / 2.0, grandezza / 2.0)
 		if i < livello:
-			_teschio(cx, cy, grandezza, ROSSO, NERO)
+			_cerchio_spine(c, grandezza, col_attivo)
 		else:
-			_teschio(cx, cy, grandezza, GRIGIO, GRIGIO_DET)
+			_cerchio_spine(c, grandezza, GRIGIO)
 
-func _teschio(cx: float, cy: float, s: float, corpo: Color, det: Color) -> void:
-	# cranio: cerchio grande
-	var rc := s * 0.38
-	var cc := Vector2(cx, cy - s * 0.08)
-	draw_circle(cc, rc, corpo)
+func _cerchio_spine(c: Vector2, s: float, col: Color) -> void:
+	var r := s * 0.40
+	var spess := maxf(s * 0.04, 1.0)
 
-	# mascella: rettangolo sotto il cranio
-	var mw := s * 0.40
-	var mh := s * 0.24
-	var mtop := cy + s * 0.14
-	draw_rect(Rect2(cx - mw / 2.0, mtop, mw, mh), corpo)
+	# anello
+	draw_arc(c, r, 0.0, TAU, 48, col, spess, true)
 
-	# occhi: due cerchi scavati
-	var ro := s * 0.10
-	var oy := cc.y + s * 0.02
-	draw_circle(Vector2(cx - s * 0.15, oy), ro, det)
-	draw_circle(Vector2(cx + s * 0.15, oy), ro, det)
-
-	# naso: triangolino
-	var ny := cc.y + s * 0.17
-	draw_colored_polygon(PackedVector2Array([
-		Vector2(cx, ny - s * 0.05),
-		Vector2(cx + s * 0.045, ny + s * 0.05),
-		Vector2(cx - s * 0.045, ny + s * 0.05),
-	]), det)
-
-	# denti: righine verticali sulla mascella
-	var spess := maxf(s * 0.025, 1.0)
-	for k in [-1, 0, 1]:
-		var dx: float = cx + k * mw * 0.25
-		draw_line(Vector2(dx, mtop + mh * 0.35), Vector2(dx, mtop + mh), det, spess)
+	# spine (piccoli triangoli verso l'esterno)
+	for j in N_SPINE:
+		var ang := TAU * j / N_SPINE + 0.2
+		var dir := Vector2.from_angle(ang)
+		var perp := Vector2(-dir.y, dir.x)
+		var base := c + dir * r
+		draw_colored_polygon(PackedVector2Array([
+			base + perp * s * 0.025,
+			base + dir * s * 0.09 + perp * s * 0.02,
+			base - perp * s * 0.025,
+		]), col)

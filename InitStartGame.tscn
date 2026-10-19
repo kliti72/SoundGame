@@ -2,9 +2,13 @@
 
 [ext_resource type="Script" uid="uid://bic7rk65kydhu" path="res://scripts/UI/BackgroundMusic.gd" id="1_0x8py"]
 [ext_resource type="Theme" uid="uid://ct1np73j88naj" path="res://theme/Trapur.tres" id="3_0x8py"]
+[ext_resource type="Script" uid="uid://cwnnpuv2bx4bs" path="res://scripts/Animation/AnimationGameTitle.gd" id="4_vt4op"]
 [ext_resource type="Script" uid="uid://umfjd67ehejx" path="res://scripts/UI/PlayingButtonStart.gd" id="4_wiyeg"]
 [ext_resource type="Texture2D" uid="uid://c4edt7k453g1e" path="res://resource/icon/headphones-xxl (1) (1).png" id="5_3lhv3"]
+[ext_resource type="Script" uid="uid://cq6p626un4475" path="res://scripts/asset/FumettoTrap.gd" id="5_oc2gx"]
 [ext_resource type="Script" uid="uid://buo8poa3u1gqf" path="res://scripts/backgroundTheme/Script/WhiteBackground.gd" id="5_w4cs2"]
+[ext_resource type="Script" uid="uid://cy7726fddq5ky" path="res://scripts/asset/Personaggio.gd" id="6_3lhv3"]
+[ext_resource type="FontFile" uid="uid://ddc2pwfrct7ga" path="res://fonts/Traptur.otf" id="6_r7t5n"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_r7t5n"]
 
@@ -50,9 +54,10 @@ layout_mode = 2
 [node name="GameTitle" type="Label" parent="Control/BoxContainer/HBoxContainer" unique_id=959164416]
 layout_mode = 2
 theme_override_colors/font_color = Color(0, 0, 0, 1)
-theme_override_font_sizes/font_size = 125
+theme_override_font_sizes/font_size = 150
 text = "TrapMusic"
 horizontal_alignment = 1
+script = ExtResource("4_vt4op")
 
 [node name="AzioneButton" type="Button" parent="Control/BoxContainer/HBoxContainer" unique_id=311491218]
 layout_mode = 2
@@ -61,7 +66,7 @@ theme_override_colors/font_focus_color = Color(0.37238696, 0.048441984, 0.081190
 theme_override_colors/font_pressed_color = Color(0.40784314, 0.05490196, 0.09019608, 1)
 theme_override_colors/font_hover_color = Color(0.40676945, 0.056754507, 0.09214278, 1)
 theme_override_colors/font_hover_pressed_color = Color(0.40784314, 0.05490196, 0.09019608, 1)
-theme_override_font_sizes/font_size = 70
+theme_override_font_sizes/font_size = 100
 text = "PLAY"
 flat = true
 
@@ -89,7 +94,76 @@ icon = ExtResource("5_3lhv3")
 flat = true
 alignment = 2
 
-[node name="Control2" type="Control" parent="." unique_id=714002667]
+[node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=2140659280]
+
+[node name="Control2" type="Control" parent="CanvasLayer" unique_id=13950041]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("3_0x8py")
+
+[node name="MarginContainer" type="MarginContainer" parent="CanvasLayer/Control2" unique_id=168152462]
+z_index = 10
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_constants/margin_bottom = 20
+
+[node name="Fumetto" type="PanelContainer" parent="CanvasLayer/Control2/MarginContainer" unique_id=716125573 node_paths=PackedStringArray("Canvas_Padre", "Teppistello")]
+layout_mode = 2
+script = ExtResource("5_oc2gx")
+Canvas_Padre = NodePath("../../..")
+Teppistello = NodePath("../../../Control/MarginContainer/Personaggio")
+font = ExtResource("6_r7t5n")
+dimensione_font = 35
+colore_neon = Color(0.5541121, 0, 0.10718591, 1)
+metadata/_custom_type_script = "uid://cq6p626un4475"
+
+[node name="Control" type="Control" parent="CanvasLayer" unique_id=1927232147]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="CanvasLayer/Control" unique_id=2083896109]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -320.0
+offset_top = -380.0
+grow_horizontal = 0
+grow_vertical = 0
+theme_override_constants/margin_bottom = -80
+
+[node name="Personaggio" type="Control" parent="CanvasLayer/Control/MarginContainer" unique_id=972246538 node_paths=PackedStringArray("fumetto")]
+custom_minimum_size = Vector2(640, 760)
+layout_mode = 2
+script = ExtResource("6_3lhv3")
+dimensione_personaggio = Vector2(540, 660)
+id_dialogo = null
+righe = null
+parla_all_avvio = true
+secondi_per_carattere = null
+usa_teppistello = null
+font = ExtResource("6_r7t5n")
+dimensione_font = null
+colore_testo = Color(0.25743568, 0.12456282, 0.08173273, 1)
+fumetto = NodePath("../../../Control2/MarginContainer/Fumetto")
+
+[node name="background" type="Control" parent="." unique_id=714002667]
 layout_mode = 3
 anchors_preset = 0
 offset_right = 40.0

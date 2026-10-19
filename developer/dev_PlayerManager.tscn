@@ -1,0 +1,6 @@
+[gd_scene format=3 uid="uid://dmbx6t67yitbf"]
+
+[ext_resource type="Script" uid="uid://b2vwuk1ntxhfa" path="res://developer/script/Dev_PlayerManager.gd" id="1_3pewo"]
+
+[node name="DevPlayerManager" type="CanvasLayer" unique_id=156316398]
+script = ExtResource("1_3pewo")

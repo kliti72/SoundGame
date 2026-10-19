@@ -1,7 +1,7 @@
 extends Node
 
 # Imposta qui il percorso della tua canzone
-const PERCORSO_MUSICA := "res://resource/music_game/hype.mp3"
+const PERCORSO_MUSICA := "res://resource/music_game/aurora.mp3"
 
 @export var volume_db := 0.0
 @export var bus := "Master"

@@ -5,7 +5,8 @@ const FILE_DATI := "res://data/song_data.json"
 const ESTENSIONI := ["mp3", "ogg", "wav"]
 const SFONDO_MIN := 1
 const SFONDO_MAX := 10
-
+const DIFF_MIN := 1
+const DIFF_MAX := 7
 
 static func file_musicali() -> Array[String]:
 	var r: Array[String] = []
@@ -14,9 +15,56 @@ static func file_musicali() -> Array[String]:
 		if nome.get_extension().to_lower() in ESTENSIONI and nome not in r:
 			r.append(nome)
 	r.sort()
-	return r
+
+	var dati = leggi()
+	if dati == null:
+		return r
+	var ordinate: Array[String] = []
+	for v in dati["canzoni"]:
+		var f: String = v.get("file", "")
+		if f in r and f not in ordinate:
+			ordinate.append(f)
+	for f in r:
+		if f not in ordinate:
+			ordinate.append(f)
+	return ordinate
 
 
+static func difficolta_di(file: String) -> int:
+	return clampi(int(trova(file).get("difficolta", DIFF_MIN)), DIFF_MIN, DIFF_MAX)
+
+
+# lista = [{"file": ..., "difficolta": ...}, ...] nell'ordine voluto
+static func salva_ordine(lista: Array) -> bool:
+	var dati = leggi()
+	if dati == null:
+		push_error("Salvataggio annullato: json rotto, perderesti le altre canzoni")
+		return false
+
+	var esistenti := {}
+	for v in dati["canzoni"]:
+		esistenti[v.get("file", "")] = v
+
+	var nuove := []
+	for item in lista:
+		var f: String = item["file"]
+		var voce: Dictionary = esistenti.get(f, {"file": f, "titolo": f.get_basename(), "note": [], "sfondo": SFONDO_MIN})
+		voce["difficolta"] = clampi(int(item["difficolta"]), DIFF_MIN, DIFF_MAX)
+		nuove.append(voce)
+		esistenti.erase(f)
+	for f in esistenti:   # nel json ma non nella lista: in coda, non perdi niente
+		nuove.append(esistenti[f])
+	dati["canzoni"] = nuove
+
+	DirAccess.make_dir_recursive_absolute("res://data")
+	var fl := FileAccess.open(FILE_DATI, FileAccess.WRITE)
+	if fl == null:
+		return false
+	fl.store_string(JSON.stringify(dati, "\t"))
+	fl.close()
+	return true
+	
+	
 # dizionario del file, null se il json è rotto
 static func leggi() -> Variant:
 	var vuoto := {"canzoni": []}
@@ -57,7 +105,7 @@ static func sfondo_di(file: String) -> int:
 	return clampi(int(trova(file).get("sfondo", SFONDO_MIN)), SFONDO_MIN, SFONDO_MAX)
 
 
-static func salva(file: String, titolo: String, note: Array, sfondo: int = SFONDO_MIN) -> bool:
+static func salva(file: String, titolo: String, note: Array, sfondo: int = SFONDO_MIN, prezzo: int = -1) -> bool:
 	var dati = leggi()
 	if dati == null:
 		push_error("Salvataggio annullato: json rotto, perderesti le altre canzoni")
@@ -80,11 +128,13 @@ static func salva(file: String, titolo: String, note: Array, sfondo: int = SFOND
 			voce["titolo"] = titolo
 			voce["note"] = punti
 			voce["sfondo"] = sfondo
+			if prezzo >= 0:
+				voce["prezzo"] = prezzo
 			presente = true
 			break
 	if not presente:
-		dati["canzoni"].append({"file": file, "titolo": titolo, "note": punti, "sfondo": sfondo})
-
+		dati["canzoni"].append({"file": file, "titolo": titolo, "note": punti, "sfondo": sfondo, "prezzo": maxi(prezzo, 0)})
+		
 	DirAccess.make_dir_recursive_absolute("res://data")
 	var f := FileAccess.open(FILE_DATI, FileAccess.WRITE)
 	if f == null:
@@ -92,3 +142,6 @@ static func salva(file: String, titolo: String, note: Array, sfondo: int = SFOND
 	f.store_string(JSON.stringify(dati, "\t"))
 	f.close()
 	return true
+	
+static func prezzo_di(file: String) -> int:
+	return maxi(int(trova(file).get("prezzo", 0)), 0)

@@ -10,7 +10,7 @@ const GRIGIO_BORDO := Color("6b6b6b")
 # --- stesso font delle banconote ---
 const FONT_PATH := "res://fonts/Traptur.otf"
 
-@export var testo := "COIN":
+@export var testo := "L":
 	set(v):
 		testo = v
 		queue_redraw()

@@ -1,0 +1,70 @@
+[gd_scene format=3 uid="uid://msh8aewypy42"]
+
+[ext_resource type="Theme" uid="uid://ct1np73j88naj" path="res://theme/Trapur.tres" id="1_lddwy"]
+[ext_resource type="Script" uid="uid://cq6p626un4475" path="res://scripts/asset/FumettoTrap.gd" id="2_o1td7"]
+[ext_resource type="FontFile" uid="uid://ddc2pwfrct7ga" path="res://fonts/Traptur.otf" id="3_1ylli"]
+[ext_resource type="Script" uid="uid://cy7726fddq5ky" path="res://scripts/asset/Personaggio.gd" id="4_8ghti"]
+
+[node name="Teppistello" type="CanvasLayer" unique_id=1297301811]
+
+[node name="Control2" type="Control" parent="." unique_id=1214229597]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("1_lddwy")
+
+[node name="MarginContainer" type="MarginContainer" parent="Control2" unique_id=976546824]
+z_index = 10
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_constants/margin_bottom = 20
+
+[node name="Fumetto" type="PanelContainer" parent="Control2/MarginContainer" unique_id=1387017789 node_paths=PackedStringArray("Canvas_Padre", "Teppistello")]
+layout_mode = 2
+script = ExtResource("2_o1td7")
+Canvas_Padre = NodePath("../../..")
+Teppistello = NodePath("../../../Control/MarginContainer/Personaggio")
+font = ExtResource("3_1ylli")
+dimensione_font = 35
+colore_neon = Color(0.5541121, 0, 0.10718591, 1)
+metadata/_custom_type_script = "uid://cq6p626un4475"
+
+[node name="Control" type="Control" parent="." unique_id=829586967]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="Control" unique_id=1299592912]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -320.0
+offset_top = -380.0
+grow_horizontal = 0
+grow_vertical = 0
+theme_override_constants/margin_bottom = -80
+
+[node name="Personaggio" type="Control" parent="Control/MarginContainer" unique_id=233712776 node_paths=PackedStringArray("fumetto")]
+custom_minimum_size = Vector2(640, 760)
+layout_mode = 2
+script = ExtResource("4_8ghti")
+dimensione_personaggio = Vector2(540, 660)
+parla_all_avvio = true
+font = ExtResource("3_1ylli")
+colore_testo = Color(0.25743568, 0.12456282, 0.08173273, 1)
+fumetto = NodePath("../../../Control2/MarginContainer/Fumetto")

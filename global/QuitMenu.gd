@@ -1,46 +1,27 @@
 extends CanvasLayer
 
 const MENU := "res://game/GameSongSelectorPage.tscn"
-const TEMA := "res://theme/Trapur.tres"
+const QUIT_MENU := preload("res://game/QuitMenu.tscn") 
 
-var radice := Control.new()
+var radice: CanvasLayer
 
 
 func _ready() -> void:
 	layer = 100
 	process_mode = Node.PROCESS_MODE_ALWAYS   # funziona anche a gioco in pausa
 
-	radice.set_anchors_preset(Control.PRESET_FULL_RECT)
-	radice.theme = load(TEMA)
+	radice = QUIT_MENU.instantiate()
 	radice.visible = false
-
-	# fondo scuro, blocca anche i click sulla scena sotto
-	var sfondo := ColorRect.new()
-	sfondo.color = Color(0, 0, 0, 0.75)
-	sfondo.set_anchors_preset(Control.PRESET_FULL_RECT)
-	radice.add_child(sfondo)
-
-	var centro := CenterContainer.new()
-	centro.set_anchors_preset(Control.PRESET_FULL_RECT)
-
-	var pannello := PanelContainer.new()
-	var box := VBoxContainer.new()
-	box.add_theme_constant_override("separation", 10)
-
-	var continua := Button.new()
-	continua.text = "Continua"
-	continua.pressed.connect(_mostra.bind(false))
-
-	var menu := Button.new()
-	menu.text = "Torna al menu"
-	menu.pressed.connect(torna_al_menu)
-
-	box.add_child(continua)
-	box.add_child(menu)
-	pannello.add_child(box)
-	centro.add_child(pannello)
-	radice.add_child(centro)
 	add_child(radice)
+
+	# i bottoni li cerco per nome unico (% = Unique Name nella scena)
+	var go_menu: Button = radice.find_child("GoMenuButton", true, false)
+	var restart: Button = radice.find_child("RestartLevelButton", true, false)
+
+	go_menu.pressed.connect(torna_al_menu)
+
+	restart.visible = false   # per ora vuoto e nascosto
+	# restart.pressed.connect(riavvia_livello)  # lo colleghi quando lo implementi
 
 
 func _unhandled_input(e: InputEvent) -> void:
@@ -51,7 +32,7 @@ func _unhandled_input(e: InputEvent) -> void:
 
 func _mostra(si: bool) -> void:
 	radice.visible = si
-	get_tree().paused = si   # musica e gioco in pausa mentre il pannello è aperto
+	get_tree().paused = si   # musica e gioco in pausa mentre il menu è aperto
 
 
 func _siamo_nel_menu() -> bool:

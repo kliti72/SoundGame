@@ -1,0 +1,56 @@
+[gd_scene format=3 uid="uid://sugn4xvjetyi"]
+
+[ext_resource type="Script" uid="uid://dgfx83f7xbqlc" path="res://scripts/asset/capellini_monete.gd" id="1_iaeyo"]
+[ext_resource type="Theme" uid="uid://ct1np73j88naj" path="res://theme/Trapur.tres" id="1_xxvbo"]
+[ext_resource type="Script" uid="uid://uoevxu7iqscq" path="res://scripts/game_header.gd" id="2_2npwb"]
+
+[node name="GameHeader" type="Control" unique_id=1106907618]
+layout_mode = 3
+anchors_preset = 10
+anchor_right = 1.0
+grow_horizontal = 2
+theme = ExtResource("1_xxvbo")
+script = ExtResource("2_2npwb")
+
+[node name="MarginContainer" type="MarginContainer" parent="." unique_id=1806365919]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -63.5
+offset_right = 63.5
+offset_bottom = 91.0
+grow_horizontal = 2
+theme_override_constants/margin_left = 0
+theme_override_constants/margin_top = 20
+theme_override_constants/margin_right = 0
+theme_override_constants/margin_bottom = 0
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer" unique_id=1912865934]
+layout_mode = 2
+
+[node name="CapelloPunteggio" type="Control" parent="MarginContainer/VBoxContainer" unique_id=35594401]
+custom_minimum_size = Vector2(56, 40)
+layout_mode = 2
+size_flags_horizontal = 4
+script = ExtResource("1_iaeyo")
+testo = "COIN"
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/VBoxContainer" unique_id=1965895712]
+layout_mode = 2
+
+[node name="Combo" type="Label" parent="MarginContainer/VBoxContainer/HBoxContainer" unique_id=695849808]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 60
+text = "X1"
+
+[node name="VSeparator" type="VSeparator" parent="MarginContainer/VBoxContainer/HBoxContainer" unique_id=1007324792]
+custom_minimum_size = Vector2(35, 35)
+layout_mode = 2
+
+[node name="Punteggio" type="Label" parent="MarginContainer/VBoxContainer/HBoxContainer" unique_id=508248331]
+layout_mode = 2
+theme_override_font_sizes/font_size = 60
+text = "9999"
+horizontal_alignment = 1

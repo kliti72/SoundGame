@@ -8,7 +8,7 @@ var note_totali := 0
 @export_file("*.tscn") var scena_gioco := "res://game/core.tscn"
 @export_file("*.tscn") var scena_menu := "res://game/GameSongSelectorPage.tscn"
 
-@onready var messaggio: Label = $BoxContainer/HBoxContainer/ProgressBarMessage
+@onready var messaggio: Label = $BoxContainer/HBoxContainer/VBoxContainer/ProgressBarMessage
 @onready var retry_button: Button = $BoxContainer/HBoxContainer/RetryButton
 @onready var menu_button: Button = $BoxContainer/HBoxContainer/GoToMenu
 @onready var music_background : backgroundGlitchMonitor = $SceneGlitchMonitorTheme

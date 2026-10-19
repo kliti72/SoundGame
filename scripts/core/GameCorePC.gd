@@ -1,21 +1,35 @@
 extends Node2D
 
 @export var canzone := "Boombap.mp3"
-@export_range(0, 3) var sfondo_uso := 0   
+@export_range(0, 3) var sfondo_uso := 0
 
 
 @onready var musica: AudioStreamPlayer = $AudioStreamPlayer
 @onready var sfondi: Array = [$SceneGlitchMonitorTheme, $BackgroundCity, $BackgroundRedWaterScene, $BackgroundForestRain, $BackgroundGraffitiWall]
+@onready var label_punteggio : Label = $CanvasLayer/GameHeader/MarginContainer/VBoxContainer/HBoxContainer/Punteggio
+@onready var game_header : Control = $CanvasLayer/GameHeader
+@onready var _npc : Personaggio = $ManagerTeppistello/Control/MarginContainer/Personaggio
+@onready var manager_tep : CanvasLayer = $ManagerTeppistello
 
 const VELOCITA := [0.5, 0.3, 3.0, 0.5, 0.5]   # una per sfondo, nello stesso ordine
 const LETTERE := "QWERTYUIOPASDFGHJKLZXCVBNM"
-const RAGGIO := 65.0            
+const RAGGIO := 65.0
 const APPROCCIO := 1.0          # da quanto prima appare la nota (ed è già cliccabile)
 const TOLLERANZA := 0.15        # quanto dopo t la nota resta cliccabile prima del miss
 const TONI := [Color(0.92, 0.92, 0.92), Color(0.55, 0.55, 0.55), Color(0.30, 0.30, 0.30)]
 const PALETTE := [Color(1.0, 0.1, 0.15), Color(0.6, 0.2, 1.0), Color(0.1, 0.9, 1.0)]
 
-var sfondo  
+# --- SIMBOLI ---------------------------------------------------------------
+# Simbolo usato quando la nota nel JSON non ha il campo "simbolo".
+# Per tornare al vecchio cerchio a moduli usa "cerchio".
+const SIMBOLO_DEFAULT := "pipistrello"
+# Elenco dei simboli disponibili: utile anche per l'editor note (menu / tasti).
+# Quando ne aggiungi uno nuovo, scrivilo qui e crea il caso nel match di _disegna_simbolo().
+const SIMBOLI := ["pipistrello", "cerchio"]   # prossimi: "pillola", "capsula"
+const VELOCITA_ALI := 6.0       # velocità del battito d'ali del pipistrello
+
+
+var sfondo
 var note: Array = []
 var onde: Array = []
 var tempo := 0.0
@@ -29,15 +43,20 @@ var note_totali := 0
 var cam: Camera2D
 var label: Label
 
+# Sagoma del pipistrello in coordinate unitarie (larghezza circa da -1 a 1), calcolata una volta
+var _bat_unit := PackedVector2Array()
+
 
 func _ready() -> void:
+	_prepara_pipistrello()
+
 	MusicaGlobale.stop(0.5)
 
 	var scelta := sfondo_uso - 1 if sfondo_uso > 0 else randi() % sfondi.size()
 	sfondo = sfondi[scelta]
 	for i in sfondi.size():
 		if i != scelta:
-			sfondi[i].queue_free()   
+			sfondi[i].queue_free()
 	sfondo.velocita = VELOCITA[scelta]
 
 	var dati = JSON.parse_string(FileAccess.get_file_as_string("res://data/song_data.json"))
@@ -60,8 +79,9 @@ func _ready() -> void:
 					"pos": Vector2(punti[i]["x"], punti[i]["y"]),
 					"tono": i % 3,
 					"lettera": lettera,
+					"simbolo": punti[i].get("simbolo", SIMBOLO_DEFAULT),   # forma della nota
 					"lobi": 5 + (i % 3),          # numero di "petali" dell'onda
-					"fase": randf() * TAU,        # ogni cerchio ondeggia in modo diverso
+					"fase": randf() * TAU,        # ogni nota ondeggia in modo diverso
 				})
 	note_totali = note.size()
 
@@ -70,6 +90,29 @@ func _ready() -> void:
 	musica.finished.connect(_fine_canzone)
 	musica.stream = load("res://resource/musica/" + canzone)
 	musica.play()
+	manager_tep.visible = false;
+
+
+func npc_interaction(note_prese) -> void:
+	if note_prese == 3:
+		manager_tep.visible = true
+		manager_tep.process_mode = Node.PROCESS_MODE_ALWAYS
+		get_tree().paused = true
+		await _npc.parla(
+			"benvenuto_song_2", [
+			"...",
+			"Fratello Sei Fast, hai già capito come ascoltare le mie basi",
+			"...",
+			"Bravo fratello hai già capito la wave da solo sono le tue prime 3 Note.",
+			"....",
+			"Ogni nota GUADAGNI CAP",
+			"...",
+			"Oggi niente OPS per me. Che fortuna"
+			],
+		)
+		manager_tep.visible = false
+		get_tree().paused = false
+	else: return
 
 
 # Lettera casuale diversa dalle ultime usate, così note vicine non hanno lo stesso tasto
@@ -98,7 +141,6 @@ func _crea_ui() -> void:
 
 func _process(_delta: float) -> void:
 	tempo = musica.get_playback_position() + AudioServer.get_time_since_last_mix() - AudioServer.get_output_latency()
-	sfondo.combo = combo
 
 	for i in range(note.size() - 1, -1, -1):
 		if tempo > note[i].t + TOLLERANZA:
@@ -108,7 +150,6 @@ func _process(_delta: float) -> void:
 	var ora := Time.get_ticks_msec() / 1000.0
 	onde = onde.filter(func(o): return ora - o.nascita < 0.8)
 
-	label.text = "%d   x%d" % [punteggio, combo]
 	queue_redraw()
 
 
@@ -125,7 +166,8 @@ func _input(event: InputEvent) -> void:
 			_prova_tasto(char(event.keycode))
 		return
 
-	# Mouse / touch: click sul cerchio (la prima nota in lista è la più vicina nel tempo)
+	# Mouse / touch: click sul simbolo (la prima nota in lista è la più vicina nel tempo)
+	# L'area di click resta circolare, qualunque sia il simbolo disegnato
 	if event is InputEventMouseButton and event.pressed and event.button_index == MOUSE_BUTTON_LEFT:
 		var mouse := get_global_mouse_position()
 		for n in note:
@@ -147,13 +189,14 @@ func _prova_tasto(lettera: String) -> void:
 	if migliore:
 		_colpita(migliore)
 
-
 func _colpita(n: Dictionary) -> void:
 	note.erase(n)
 	note_prese += 1
 	combo += 1
 	serie += 1
-	punteggio += 100 * (1 + floori(combo / 10.0))
+
+	var guadagno: int = 100 * (1 + floori(combo / 10.0))
+	punteggio += guadagno
 
 	var colore: Color = Color.WHITE
 	var burst := serie >= soglia
@@ -175,6 +218,10 @@ func _colpita(n: Dictionary) -> void:
 	sfondo.pulse()
 	_shake(6.0 if burst else 2.5)
 
+	game_header.aggiorna_combo(combo)
+	game_header.aggiorna_punteggio(punteggio, guadagno)
+	print("note prese", note_prese)
+	npc_interaction(note_prese)
 
 func _miss(pos: Vector2) -> void:
 	combo = 0
@@ -236,6 +283,10 @@ func _fine_canzone() -> void:
 	})
 
 
+# =============================================================================
+#  FORME E SIMBOLI
+# =============================================================================
+
 # Cerchio "a moduli": il raggio ondeggia con sin(angolo * lobi + fase), chiuso su se stesso
 func _forma(centro: Vector2, raggio: float, ampiezza: float, lobi: int, fase: float, punti := 72) -> PackedVector2Array:
 	var pts := PackedVector2Array()
@@ -244,6 +295,99 @@ func _forma(centro: Vector2, raggio: float, ampiezza: float, lobi: int, fase: fl
 		var r := raggio * (1.0 + ampiezza * sin(ang * lobi + fase))
 		pts.append(centro + Vector2(cos(ang), sin(ang)) * r)
 	return pts
+
+
+# Riempie un poligono e ne disegna il contorno chiuso
+func _riempi_e_contorna(pts: PackedVector2Array, riempimento: Color, contorno: Color, spessore: float) -> void:
+	draw_colored_polygon(pts, riempimento)
+	var chiuso := pts.duplicate()
+	chiuso.append(pts[0])
+	draw_polyline(chiuso, contorno, spessore, true)
+
+
+# Punto di ingresso: sceglie come disegnare la nota in base a n.simbolo.
+# Per aggiungere un simbolo nuovo: 1) scrivi la funzione _simbolo_xxx  2) aggiungi un caso qui
+# 3) aggiungi il nome in SIMBOLI.
+func _disegna_simbolo(n: Dictionary, r: float, wobble: float, fase: float, a: float, tono: Color) -> void:
+	match n.simbolo:
+		"pipistrello":
+			_simbolo_pipistrello(n.pos, r, fase, a, tono)
+		"cerchio":
+			_simbolo_cerchio(n, r, wobble, fase, a, tono)
+		# "pillola":
+		#	_simbolo_pillola(n.pos, r, fase, a, tono)
+		# "capsula":
+		#	_simbolo_capsula(n.pos, r, fase, a, tono)
+		_:
+			_simbolo_cerchio(n, r, wobble, fase, a, tono)   # simbolo sconosciuto: cerchio
+
+
+# --- Cerchio a moduli (la forma originale) -----------------------------------
+func _simbolo_cerchio(n: Dictionary, r: float, wobble: float, fase: float, a: float, tono: Color) -> void:
+	var corpo := _forma(n.pos, r, wobble, n.lobi, fase)
+	draw_polyline(corpo, Color(tono, a), 4.0, true)
+	corpo.remove_at(corpo.size() - 1)   # via il punto duplicato per il poligono pieno
+	draw_colored_polygon(corpo, Color(0.04, 0.04, 0.04, 0.55 * a))
+
+
+# --- Pipistrello -----------------------------------------------------------
+# Metà destra della sagoma (dalla testa verso l'ala e giù fino alla coda);
+# la metà sinistra viene specchiata in _prepara_pipistrello().
+func _prepara_pipistrello() -> void:
+	var meta: Array[Vector2] = [
+		Vector2(0.00, -0.28),   # centro testa
+		Vector2(0.10, -0.55),   # punta orecchio
+		Vector2(0.20, -0.30),   # base orecchio
+		Vector2(0.55, -0.45),   # braccio dell'ala
+		Vector2(1.00, -0.65),   # punta dell'ala
+		Vector2(0.88, -0.15),   # rientro 1 del bordo ala
+		Vector2(0.80, 0.15),    # punta 1 del bordo ala
+		Vector2(0.60, 0.00),    # rientro 2
+		Vector2(0.48, 0.30),    # punta 2
+		Vector2(0.30, 0.10),    # rientro 3
+		Vector2(0.14, 0.45),    # coda destra
+		Vector2(0.00, 0.38),    # coda centro
+	]
+	var centra := Vector2(0, 0.1)   # sposta la sagoma verso il centro del cerchio di hit
+	_bat_unit = PackedVector2Array()
+	for p in meta:
+		_bat_unit.append(p + centra)
+	for i in range(meta.size() - 2, 0, -1):
+		_bat_unit.append(Vector2(-meta[i].x, meta[i].y) + centra)
+
+
+func _simbolo_pipistrello(pos: Vector2, r: float, fase: float, a: float, tono: Color) -> void:
+	# Battito d'ali: le punte salgono e scendono, il corpo resta fermo
+	var flap := sin(fase * VELOCITA_ALI) * 0.18
+	var pts := PackedVector2Array()
+	for p in _bat_unit:
+		pts.append(pos + Vector2(p.x, p.y - absf(p.x) * flap) * r * 1.1)
+	_riempi_e_contorna(pts, Color(0.04, 0.04, 0.04, 0.55 * a), Color(tono, a), 3.0)
+
+
+# --- Spazio per i prossimi simboli -------------------------------------------
+# Helper pronto per pillola e capsula: forma a "stadio" (rettangolo con estremi tondi).
+# lung = lunghezza totale, r = raggio degli estremi, rot = rotazione in radianti.
+func _punti_capsula(centro: Vector2, lung: float, r: float, rot: float) -> PackedVector2Array:
+	var pts := PackedVector2Array()
+	var meta := lung * 0.5 - r   # distanza dei centri dei due semicerchi dal centro
+	for i in 13:
+		pts.append(Vector2(meta, 0) + Vector2.from_angle(-PI / 2.0 + PI * i / 12.0) * r)
+	for i in 13:
+		pts.append(Vector2(-meta, 0) + Vector2.from_angle(PI / 2.0 + PI * i / 12.0) * r)
+	for i in pts.size():
+		pts[i] = centro + pts[i].rotated(rot)
+	return pts
+
+# Esempio di traccia per la pillola (decommenta e adatta quando vuoi usarla):
+#
+# func _simbolo_pillola(pos: Vector2, r: float, fase: float, a: float, tono: Color) -> void:
+#	var rot := -PI / 4.0 + sin(fase) * 0.1
+#	var corpo := _punti_capsula(pos, r * 2.0, r * 0.55, rot)
+#	_riempi_e_contorna(corpo, Color(0.04, 0.04, 0.04, 0.55 * a), Color(tono, a), 3.0)
+#	# linea al centro che divide le due metà
+#	var dir := Vector2.from_angle(rot + PI / 2.0) * r * 0.55
+#	draw_line(pos - dir, pos + dir, Color(tono, a), 3.0, true)
 
 
 func _draw() -> void:
@@ -264,13 +408,10 @@ func _draw() -> void:
 		# alone morbido
 		draw_circle(n.pos, r * 1.35, Color(0, 0, 0, 0.30 * a))
 
-		# corpo a moduli, semitrasparente
-		var corpo := _forma(n.pos, r, wobble, n.lobi, fase)
-		draw_polyline(corpo, Color(tono, a), 4.0, true)
-		corpo.remove_at(corpo.size() - 1)   # via il punto duplicato per il poligono pieno
-		draw_colored_polygon(corpo, Color(0.04, 0.04, 0.04, 0.55 * a))
+		# simbolo della nota (pipistrello, cerchio, ...)
+		_disegna_simbolo(n, r, wobble, fase, a, tono)
 
-		# anello di approccio a onde che si stringe sul cerchio
+		# anello di approccio a onde che si stringe sul simbolo
 		var r_app := RAGGIO + (resta / APPROCCIO) * RAGGIO * 2.0
 		var anello := _forma(n.pos, maxf(r_app, r), 0.04 + 0.10 * clampf(resta / APPROCCIO, 0.0, 1.0), n.lobi + 2, -fase * 1.5)
 		draw_polyline(anello, Color(1, 1, 1, a * 0.5), 2.5, true)

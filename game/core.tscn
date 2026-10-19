@@ -1,14 +1,16 @@
 [gd_scene format=3 uid="uid://ctu5tflxvtt3v"]
 
-[ext_resource type="Script" uid="uid://cxh263yvkvkhi" path="res://scripts/core/GameCorePC.gd" id="1_wm6y1"]
+[ext_resource type="Script" uid="uid://sxs20rpli1wg" path="res://scripts/core/main.gd" id="1_tv15p"]
 [ext_resource type="PackedScene" uid="uid://cfcou3dl2fbag" path="res://scripts/backgroundTheme/Scene/SceneMoonWithCity.tscn" id="2_4ka8g"]
 [ext_resource type="PackedScene" uid="uid://dr4w2xikrexlr" path="res://scripts/backgroundTheme/Scene/SceneRedStreetCity.tscn" id="3_7ljso"]
 [ext_resource type="PackedScene" uid="uid://uyhhodkibpj6" path="res://scripts/backgroundTheme/Scene/SceneGlitchMonitorTheme.tscn" id="4_vf36u"]
 [ext_resource type="PackedScene" uid="uid://bmudy8inw01md" path="res://scripts/backgroundTheme/Scene/BackgroundForestRain.tscn" id="5_4ka8g"]
 [ext_resource type="PackedScene" uid="uid://dhg44ndqnmeo4" path="res://scripts/backgroundTheme/Scene/BackgroundGraffitiWall.tscn" id="6_7ljso"]
+[ext_resource type="PackedScene" uid="uid://sugn4xvjetyi" path="res://game/GameHeader.tscn" id="7_vf36u"]
+[ext_resource type="PackedScene" uid="uid://msh8aewypy42" path="res://game/component/Teppistello.tscn" id="8_tv15p"]
 
-[node name="CoreGame" type="Node2D" unique_id=39712773]
-script = ExtResource("1_wm6y1")
+[node name="CoreGame" type="Node2D" unique_id=1644826644]
+script = ExtResource("1_tv15p")
 
 [node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="." unique_id=923086508]
 
@@ -21,3 +23,9 @@ script = ExtResource("1_wm6y1")
 [node name="BackgroundForestRain" parent="." unique_id=44597416 instance=ExtResource("5_4ka8g")]
 
 [node name="BackgroundGraffitiWall" parent="." unique_id=837288818 instance=ExtResource("6_7ljso")]
+
+[node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=268710997]
+
+[node name="GameHeader" parent="CanvasLayer" unique_id=1106907618 instance=ExtResource("7_vf36u")]
+
+[node name="ManagerTeppistello" parent="." unique_id=1297301811 instance=ExtResource("8_tv15p")]

@@ -1,0 +1,24 @@
+[gd_scene format=3 uid="uid://ciuwsbqy3c7sy"]
+
+[ext_resource type="Script" uid="uid://djaojp8uvxuqo" path="res://scripts/armadio_manager.gd" id="1_jkpe8"]
+[ext_resource type="FontFile" uid="uid://ddc2pwfrct7ga" path="res://fonts/Traptur.otf" id="2_30414"]
+[ext_resource type="Script" uid="uid://bfosx68htip7q" path="res://scripts/asset/armadio_stile.gd" id="3_l8n6j"]
+
+[sub_resource type="Resource" id="Resource_mqdtl"]
+script = ExtResource("3_l8n6j")
+font = ExtResource("2_30414")
+colore_muro_alto = Color(0.013736059, 0.047932565, 0.048071884, 1)
+colore_muro_basso = Color(0.021556053, 0.013277606, 0.0015317055, 1)
+colore_neon = Color(0.93266636, 0.94342685, 0.9747223, 1)
+colore_neon_2 = Color(1, 1, 1, 0.28235295)
+metadata/_custom_type_script = "uid://bfosx68htip7q"
+
+[node name="Collections" type="Control" unique_id=2120305659]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_jkpe8")
+stile = SubResource("Resource_mqdtl")

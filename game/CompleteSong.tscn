@@ -3,6 +3,7 @@
 [ext_resource type="Theme" uid="uid://ct1np73j88naj" path="res://theme/Trapur.tres" id="1_0kv4e"]
 [ext_resource type="Script" uid="uid://bwxe8terenwvo" path="res://scripts/core/CompleteSong.gd" id="1_0tehi"]
 [ext_resource type="PackedScene" uid="uid://uyhhodkibpj6" path="res://scripts/backgroundTheme/Scene/SceneGlitchMonitorTheme.tscn" id="1_0yhwr"]
+[ext_resource type="Script" uid="uid://w6ugp1n754km" path="res://scripts/asset/ProgressBarStyle.gd" id="3_4jaaw"]
 
 [node name="CompleteSong" type="Control" unique_id=613612034]
 layout_mode = 3
@@ -35,23 +36,54 @@ custom_minimum_size = Vector2(0.125, 0)
 layout_mode = 2
 size_flags_horizontal = 4
 
-[node name="ProgressBarMessage" type="Label" parent="BoxContainer/HBoxContainer" unique_id=211502427]
+[node name="Label" type="Label" parent="BoxContainer/HBoxContainer" unique_id=1734894147]
+layout_mode = 2
+theme_override_font_sizes/font_size = 150
+text = "SONG COMPLETE"
+
+[node name="VBoxContainer" type="HBoxContainer" parent="BoxContainer/HBoxContainer" unique_id=1945253739]
+layout_mode = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="BoxContainer/HBoxContainer/VBoxContainer" unique_id=1982112324]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/margin_left = 5
+theme_override_constants/margin_top = 5
+theme_override_constants/margin_right = 5
+theme_override_constants/margin_bottom = 5
+
+[node name="ProgressBar" type="ProgressBar" parent="BoxContainer/HBoxContainer/VBoxContainer/MarginContainer" unique_id=2007689926]
+custom_minimum_size = Vector2(50, 80)
+layout_mode = 2
+size_flags_horizontal = 3
+step = 50.0
+value = 50.0
+show_percentage = false
+script = ExtResource("3_4jaaw")
+
+[node name="ProgressBarMessage" type="Label" parent="BoxContainer/HBoxContainer/VBoxContainer" unique_id=211502427]
 layout_mode = 2
 size_flags_vertical = 0
 theme_override_font_sizes/font_size = 62
-text = "8 / 8 NOTES"
+text = "8 / 8 "
 horizontal_alignment = 1
 
 [node name="RetryButton" type="Button" parent="BoxContainer/HBoxContainer" unique_id=651568739]
 custom_minimum_size = Vector2(300, 150)
 layout_mode = 2
-theme_override_font_sizes/font_size = 62
-text = "RETRY"
+theme_override_colors/font_hover_color = Color(0.52261114, 0.01944175, 0, 1)
+theme_override_colors/font_hover_pressed_color = Color(0.52156866, 0.019607844, 0, 1)
+theme_override_font_sizes/font_size = 100
+text = "REPET BEAT"
+flat = true
 
 [node name="GoToMenu" type="Button" parent="BoxContainer/HBoxContainer" unique_id=1657868051]
 custom_minimum_size = Vector2(300, 100)
 layout_mode = 2
-theme_override_font_sizes/font_size = 62
-text = "GO TO MENU"
+theme_override_colors/font_hover_color = Color(0.52156866, 0.019607844, 0, 1)
+theme_override_colors/font_hover_pressed_color = Color(0.52156866, 0.019607844, 0, 1)
+theme_override_font_sizes/font_size = 100
+text = "CHANGE SONG"
+flat = true
 
 [node name="SceneGlitchMonitorTheme" parent="." unique_id=550762539 instance=ExtResource("1_0yhwr")]
