@@ -4,6 +4,12 @@
 [ext_resource type="Script" uid="uid://bwxe8terenwvo" path="res://scripts/core/CompleteSong.gd" id="1_0tehi"]
 [ext_resource type="PackedScene" uid="uid://uyhhodkibpj6" path="res://scripts/backgroundTheme/Scene/SceneGlitchMonitorTheme.tscn" id="1_0yhwr"]
 [ext_resource type="Script" uid="uid://w6ugp1n754km" path="res://scripts/asset/ProgressBarStyle.gd" id="3_4jaaw"]
+[ext_resource type="Script" uid="uid://dgfx83f7xbqlc" path="res://scripts/asset/capellini_monete.gd" id="3_6cla0"]
+[ext_resource type="FontFile" uid="uid://ddc2pwfrct7ga" path="res://fonts/Traptur.otf" id="5_y7w8l"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_y7w8l"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_6eiyk"]
 
 [node name="CompleteSong" type="Control" unique_id=613612034]
 layout_mode = 3
@@ -36,10 +42,33 @@ custom_minimum_size = Vector2(0.125, 0)
 layout_mode = 2
 size_flags_horizontal = 4
 
-[node name="Label" type="Label" parent="BoxContainer/HBoxContainer" unique_id=1734894147]
+[node name="Titolo" type="Label" parent="BoxContainer/HBoxContainer" unique_id=1734894147]
 layout_mode = 2
 theme_override_font_sizes/font_size = 150
 text = "SONG COMPLETE"
+
+[node name="VBoxContainer2" type="HBoxContainer" parent="BoxContainer/HBoxContainer" unique_id=1665410661]
+layout_mode = 2
+size_flags_vertical = 4
+
+[node name="Capellino" type="Control" parent="BoxContainer/HBoxContainer/VBoxContainer2" unique_id=556069374]
+custom_minimum_size = Vector2(156, 120)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 3
+script = ExtResource("3_6cla0")
+testo = "PROFIT"
+larghezza = 156.0
+altezza = 120.0
+
+[node name="MarginContainer" type="MarginContainer" parent="BoxContainer/HBoxContainer/VBoxContainer2" unique_id=575929308]
+layout_mode = 2
+size_flags_horizontal = 10
+
+[node name="MoneteGuadagnate" type="Label" parent="BoxContainer/HBoxContainer/VBoxContainer2/MarginContainer" unique_id=1308344116]
+layout_mode = 2
+theme_override_font_sizes/font_size = 90
+text = "+ 39923"
 
 [node name="VBoxContainer" type="HBoxContainer" parent="BoxContainer/HBoxContainer" unique_id=1945253739]
 layout_mode = 2
@@ -56,12 +85,17 @@ theme_override_constants/margin_bottom = 5
 custom_minimum_size = Vector2(50, 80)
 layout_mode = 2
 size_flags_horizontal = 3
-step = 50.0
+size_flags_vertical = 4
+theme_override_styles/background = SubResource("StyleBoxEmpty_y7w8l")
+theme_override_styles/fill = SubResource("StyleBoxEmpty_6eiyk")
 value = 50.0
-show_percentage = false
 script = ExtResource("3_4jaaw")
+text_font = ExtResource("5_y7w8l")
+text_size = 50
+text_outline_size = 10
 
 [node name="ProgressBarMessage" type="Label" parent="BoxContainer/HBoxContainer/VBoxContainer" unique_id=211502427]
+visible = false
 layout_mode = 2
 size_flags_vertical = 0
 theme_override_font_sizes/font_size = 62

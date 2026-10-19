@@ -1,18 +1,18 @@
 extends CanvasLayer
 # Notifica globale stile achievement. Uso: Notifica.mostra("Titolo", "testo", 3.0)
 
-const FONT_PATH := "res://resource/font/trap.ttf"   # cambia col tuo font (se non esiste usa quello di default)
-const LARGHEZZA_TESTO := 320.0
+const FONT_PATH := "res://fonts/Traptur.otf"   # cambia col tuo font (se non esiste usa quello di default)
+const LARGHEZZA_TESTO := 520.0
 const MARGINE := 24.0
 const DURATA_DEFAULT := 3.0
 
 var _box := PanelContainer.new()
 var _titolo := Label.new()
-var _testo := Label.new()
+var _testo := RichTextLabel.new()
 var _suono := AudioStreamPlayer.new()
 var _coda: Array[Dictionary] = []
 var _occupata := false
-
+var _corrente := ""
 
 func _ready() -> void:
 	layer = 128
@@ -34,7 +34,7 @@ func _ready() -> void:
 	v.add_theme_constant_override("separation", 8)
 	_box.add_child(v)
 
-	_titolo.add_theme_font_size_override("font_size", 22)
+	_titolo.add_theme_font_size_override("font_size", 45)
 	_titolo.add_theme_color_override("font_color", Color.WHITE)
 	v.add_child(_titolo)
 
@@ -43,16 +43,20 @@ func _ready() -> void:
 	linea.custom_minimum_size.y = 2
 	v.add_child(linea)
 
-	_testo.add_theme_font_size_override("font_size", 16)
-	_testo.add_theme_color_override("font_color", Color(0.75, 0.75, 0.75))
+	_testo.bbcode_enabled = true
+	_testo.fit_content = true
+	_testo.scroll_active = false
+	_testo.add_theme_font_size_override("normal_font_size", 25)
+	_testo.add_theme_color_override("default_color", Color(0.75, 0.75, 0.75))
 	_testo.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	_testo.custom_minimum_size.x = LARGHEZZA_TESTO
+	v.add_child(_testo)
 	v.add_child(_testo)
 
 	if ResourceLoader.exists(FONT_PATH):
 		var font: Font = load(FONT_PATH)
 		_titolo.add_theme_font_override("font", font)
-		_testo.add_theme_font_override("font", font)
+		_testo.add_theme_font_override("normal_font", font)
 
 	_suono.stream = _crea_suono()
 	_suono.volume_db = -4.0
@@ -62,7 +66,14 @@ func _ready() -> void:
 # ---------- API ----------
 
 func mostra(titolo: String, testo := "", durata := DURATA_DEFAULT) -> void:
-	_coda.append({"titolo": titolo, "testo": testo, "durata": durata})
+	var chiave := titolo + "|" + testo
+	# stessa notifica già a schermo o in coda? ignora
+	if chiave == _corrente:
+		return
+	for n in _coda:
+		if n.chiave == chiave:
+			return
+	_coda.append({"titolo": titolo, "testo": testo, "durata": durata, "chiave": chiave})
 	if not _occupata:
 		_prossima()
 
@@ -70,12 +81,14 @@ func mostra(titolo: String, testo := "", durata := DURATA_DEFAULT) -> void:
 # ---------- ANIMAZIONE ----------
 
 func _prossima() -> void:
+	
 	if _coda.is_empty():
 		_occupata = false
 		return
 	_occupata = true
 
 	var n: Dictionary = _coda.pop_front()
+	_corrente = n.chiave
 	_titolo.text = n.titolo.to_upper()
 	_testo.text = n.testo
 	_testo.visible = n.testo != ""
@@ -98,6 +111,7 @@ func _prossima() -> void:
 	await tw.finished
 
 	_box.hide()
+	_corrente = ""
 	_prossima()   # se ce n'è un'altra in coda parte subito
 
 

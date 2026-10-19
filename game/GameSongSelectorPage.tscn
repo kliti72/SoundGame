@@ -15,12 +15,13 @@
 [ext_resource type="Script" uid="uid://b3rq7wu8y0jw3" path="res://scripts/asset/vinile_style.gd" id="9_jjtco"]
 [ext_resource type="Script" uid="uid://buo8poa3u1gqf" path="res://scripts/backgroundTheme/Script/WhiteBackground.gd" id="9_n6qt4"]
 [ext_resource type="PackedScene" uid="uid://msh8aewypy42" path="res://game/component/Teppistello.tscn" id="10_dc8yc"]
+[ext_resource type="Script" uid="uid://vlu14j1ensop" path="res://scripts/asset/HoverTrap.gd" id="12_4o3ff"]
 
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_jjtco"]
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_evofe"]
 
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_4o3ff"]
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_ff6bv"]
 
-[sub_resource type="Shader" id="Shader_evofe"]
+[sub_resource type="Shader" id="Shader_v5n0t"]
 code = "
 shader_type canvas_item;
 
@@ -80,27 +81,27 @@ void fragment() {
 }
 "
 
-[sub_resource type="FastNoiseLite" id="FastNoiseLite_ff6bv"]
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_lyhfc"]
 
-[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_v5n0t"]
-noise = SubResource("FastNoiseLite_ff6bv")
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_y4ned"]
+noise = SubResource("FastNoiseLite_lyhfc")
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_lyhfc"]
-shader = SubResource("Shader_evofe")
-shader_parameter/angle = 0.5403242561475403
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_dxbyo"]
+shader = SubResource("Shader_v5n0t")
+shader_parameter/angle = 5.378829552307533
 shader_parameter/label_radius = 0.34
 shader_parameter/hole_radius = 0.03
 shader_parameter/groove_freq = 140.0
 shader_parameter/vinyl_color = Color(0.03137255, 0.03137255, 0.03137255, 1)
 shader_parameter/sheen_strength = 0.18
-shader_parameter/noise = SubResource("NoiseTexture2D_v5n0t")
+shader_parameter/noise = SubResource("NoiseTexture2D_y4ned")
 shader_parameter/progress = 0.0
 shader_parameter/fuoco = Color(1, 0.35, 0, 1)
 shader_parameter/larghezza = 0.15
 
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_y4ned"]
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_ricob"]
 
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_dxbyo"]
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_xexs3"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_h4mvk"]
 
@@ -213,8 +214,8 @@ livello = 3
 visible = false
 z_index = 10
 layout_mode = 2
-theme_override_styles/background = SubResource("StyleBoxEmpty_jjtco")
-theme_override_styles/fill = SubResource("StyleBoxEmpty_4o3ff")
+theme_override_styles/background = SubResource("StyleBoxEmpty_evofe")
+theme_override_styles/fill = SubResource("StyleBoxEmpty_ff6bv")
 step = 0.0
 value = 60.0
 show_percentage = false
@@ -262,7 +263,7 @@ theme_override_constants/margin_right = 5
 theme_override_constants/margin_bottom = 5
 
 [node name="TextureRect" type="TextureRect" parent="Control/VBoxContainer/CenterContainer/VBoxContainer/ImageReact" unique_id=87801007]
-material = SubResource("ShaderMaterial_lyhfc")
+material = SubResource("ShaderMaterial_dxbyo")
 custom_minimum_size = Vector2(330, 330)
 custom_maximum_size = Vector2(330, 330)
 layout_mode = 2
@@ -313,8 +314,8 @@ theme_override_constants/margin_bottom = -15
 custom_minimum_size = Vector2(50, 80)
 layout_mode = 2
 size_flags_horizontal = 3
-theme_override_styles/background = SubResource("StyleBoxEmpty_y4ned")
-theme_override_styles/fill = SubResource("StyleBoxEmpty_dxbyo")
+theme_override_styles/background = SubResource("StyleBoxEmpty_ricob")
+theme_override_styles/fill = SubResource("StyleBoxEmpty_xexs3")
 step = 50.0
 value = 50.0
 show_percentage = false
@@ -347,6 +348,10 @@ theme_override_styles/normal = ExtResource("9_5u5fu")
 text = "PLAY THIS SONG"
 flat = true
 alignment = 0
+
+[node name="HoverTrap" type="Node" parent="Control/VBoxContainer/CenterContainer/VBoxContainer/MarginContainer/StartTrapSong" unique_id=782730368]
+script = ExtResource("12_4o3ff")
+metadata/_custom_type_script = "uid://vlu14j1ensop"
 
 [node name="ProssimaCanzone" type="Button" parent="Control/VBoxContainer" unique_id=1499635799]
 layout_mode = 2

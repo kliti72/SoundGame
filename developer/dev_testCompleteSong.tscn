@@ -1,0 +1,14 @@
+[gd_scene format=3 uid="uid://dc4ugjgw111mp"]
+
+[ext_resource type="Script" uid="uid://dio6uupfx0bt8" path="res://developer/script/dev_testCompleteSong.gd" id="1_jvvke"]
+
+[node name="DevTestCompleteSong" type="Control" unique_id=222488734]
+layout_mode = 3
+anchors_preset = 0
+script = ExtResource("1_jvvke")
+
+[node name="Button" type="Button" parent="." unique_id=958090971]
+layout_mode = 0
+offset_right = 8.0
+offset_bottom = 8.0
+text = "Simulate Complete Song"

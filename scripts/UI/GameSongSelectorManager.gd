@@ -95,10 +95,11 @@ func aggiorna_pagina() -> void:
 		return
 
 	var titolo := canzoni_disponibili[page_counter]
+	var s := Player.canzone_per_titolo(titolo)
+
 	vinile.texture = load("res://resource/images/Tunnel_%d.png" % page_counter)
 	titolo_canzone.text = titolo
 
-	var s := Player.canzone_per_titolo(titolo)
 	var sbloccata := s != null and not s.lock
 	start_trap_song.text = "Start Song" if sbloccata else "Bloccata %s" % s.price
 
@@ -125,21 +126,31 @@ func _on_before_song_pressed() -> void:
 		return
 	await _cambia(page_counter - 1)
 
-# Play Button
+
+var _cooldown := false
+
 func _on_play_song_button() -> void:
 	# Canzone bloccata: il tasto serve ad acquistarla
 	if not Player.verifica_lock(canzoni_disponibili[page_counter]):
-		if true:
-			if(Player.puo_permettersi(SongDB.prezzo_di(nomi_file[page_counter]))):
-				Player.completata(nomi_file[page_counter] + ".mp3")
-				Notifica.mostra("Canzone Sbloccata", "La canzone %s ora disponibile nella tua libreria. " % nomi_file[page_counter])
-				print("Player ha comprato %s" % nomi_file[page_counter])
-				aggiorna_pagina()
+		if _cooldown:
+			return
+		_cooldown = true
+
+		var titolo := canzoni_disponibili[page_counter]
+		var s := Player.canzone_per_titolo(titolo)
+
+		if Player.puo_permettersi(SongDB.prezzo_di(nomi_file[page_counter])):
+			if Player.sblocca_lock(titolo):
+				Player.spendi_monete(s.price)
+				Notifica.mostra("Canzone Sbloccata", "La canzone %s ora è disponibile nella tua libreria." % nomi_file[page_counter])
 			else:
-				# Script globale notifica
-				Notifica.mostra("NO CAP", "You don't have CAP")
-				print("Non hai abbastanza monete")
-			aggiorna_pagina()
+				Notifica.mostra("Already Unlocked", "The song is already unlocked")
+		else:
+			Notifica.mostra("NO CAP", "Non hai abbastanza CAP, ne hai solo [wave][color=gold]%s[/color][/wave]" % Player.monete)
+
+		aggiorna_pagina()
+		await get_tree().create_timer(0.6).timeout
+		_cooldown = false
 		return
 
 	titolo_canzone.text = "Cambio Scena"

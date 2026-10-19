@@ -7,6 +7,7 @@
 [ext_resource type="PackedScene" uid="uid://bmudy8inw01md" path="res://scripts/backgroundTheme/Scene/BackgroundForestRain.tscn" id="5_4ka8g"]
 [ext_resource type="PackedScene" uid="uid://dhg44ndqnmeo4" path="res://scripts/backgroundTheme/Scene/BackgroundGraffitiWall.tscn" id="6_7ljso"]
 [ext_resource type="PackedScene" uid="uid://sugn4xvjetyi" path="res://game/GameHeader.tscn" id="7_vf36u"]
+[ext_resource type="Texture2D" uid="uid://c3xrn0efd0qe8" path="res://resource/icon/pause.jpg" id="8_iehov"]
 [ext_resource type="PackedScene" uid="uid://msh8aewypy42" path="res://game/component/Teppistello.tscn" id="8_tv15p"]
 
 [node name="CoreGame" type="Node2D" unique_id=1644826644]
@@ -27,5 +28,31 @@ script = ExtResource("1_tv15p")
 [node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=268710997]
 
 [node name="GameHeader" parent="CanvasLayer" unique_id=1106907618 instance=ExtResource("7_vf36u")]
+
+[node name="MarginContainer2" type="MarginContainer" parent="CanvasLayer" unique_id=1126506547]
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -188.0
+offset_bottom = 114.0
+grow_horizontal = 0
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 10
+
+[node name="MarginContainer" type="MarginContainer" parent="CanvasLayer/MarginContainer2" unique_id=1033804625]
+custom_minimum_size = Vector2(64, 64)
+custom_maximum_size = Vector2(64, 64)
+layout_mode = 2
+size_flags_horizontal = 8
+
+[node name="PauseButton" type="Button" parent="CanvasLayer/MarginContainer2/MarginContainer" unique_id=536607993]
+custom_maximum_size = Vector2(64, 64)
+layout_mode = 2
+icon = ExtResource("8_iehov")
+flat = true
+icon_alignment = 2
+expand_icon = true
 
 [node name="ManagerTeppistello" parent="." unique_id=1297301811 instance=ExtResource("8_tv15p")]

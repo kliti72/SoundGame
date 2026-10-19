@@ -6,6 +6,7 @@
 [ext_resource type="Script" uid="uid://umfjd67ehejx" path="res://scripts/UI/PlayingButtonStart.gd" id="4_wiyeg"]
 [ext_resource type="Texture2D" uid="uid://c4edt7k453g1e" path="res://resource/icon/headphones-xxl (1) (1).png" id="5_3lhv3"]
 [ext_resource type="Script" uid="uid://cq6p626un4475" path="res://scripts/asset/FumettoTrap.gd" id="5_oc2gx"]
+[ext_resource type="Script" uid="uid://vlu14j1ensop" path="res://scripts/asset/HoverTrap.gd" id="5_smcrb"]
 [ext_resource type="Script" uid="uid://buo8poa3u1gqf" path="res://scripts/backgroundTheme/Script/WhiteBackground.gd" id="5_w4cs2"]
 [ext_resource type="Script" uid="uid://cy7726fddq5ky" path="res://scripts/asset/Personaggio.gd" id="6_3lhv3"]
 [ext_resource type="FontFile" uid="uid://ddc2pwfrct7ga" path="res://fonts/Traptur.otf" id="6_r7t5n"]
@@ -69,6 +70,10 @@ theme_override_colors/font_hover_pressed_color = Color(0.40784314, 0.05490196, 0
 theme_override_font_sizes/font_size = 100
 text = "PLAY"
 flat = true
+
+[node name="HoverTrap" type="Node" parent="Control/BoxContainer/HBoxContainer/AzioneButton" unique_id=1926705600]
+script = ExtResource("5_smcrb")
+metadata/_custom_type_script = "uid://vlu14j1ensop"
 
 [node name="Cuffie Icon & Text" type="Button" parent="Control" unique_id=457564669]
 layout_mode = 1

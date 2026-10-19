@@ -7,11 +7,14 @@ extends Node2D
 ## Tipo di note (usato per le note senza "simbolo" nel JSON). Tieni allineato con SimboliNote.ELENCO
 @export_enum("pipistrello", "cerchio", "pillola") var tipo_note := "pillola"
 
+signal pause_premuto
+
 @onready var musica: AudioStreamPlayer = $AudioStreamPlayer
 @onready var sfondi: Array = [$SceneGlitchMonitorTheme, $BackgroundCity, $BackgroundRedWaterScene, $BackgroundForestRain, $BackgroundGraffitiWall]
 @onready var game_header: Control = $CanvasLayer/GameHeader
 @onready var _npc: Personaggio = $ManagerTeppistello/Control/MarginContainer/Personaggio
 @onready var manager_tep: CanvasLayer = $ManagerTeppistello
+@onready var pause_button : Button = $CanvasLayer/MarginContainer2/MarginContainer/PauseButton
 
 const VELOCITA := [0.5, 0.3, 3.0, 0.5, 0.5]   # una per sfondo, nello stesso ordine
 const PALETTE := [Color(1.0, 0.1, 0.15), Color(0.6, 0.2, 1.0), Color(0.1, 0.9, 1.0)]
@@ -48,6 +51,14 @@ func _ready() -> void:
 	musica.stream = load("res://resource/musica/" + canzone)
 	musica.play()
 	manager_tep.visible = false
+	
+	pause_button.pressed.connect(on_pause_button)
+
+func on_pause_button():
+	pause_premuto.emit()  
+	Transizione.vai("res://game/GameSongSelectorPage.tscn")
+	queue_free()           # chiude la scena corrente
+
 
 
 func _scegli_sfondo() -> void:
@@ -115,10 +126,11 @@ func _dialogo_npc() -> void:
 
 func _fine_canzone() -> void:
 	campo.ferma()   # niente input durante la transizione
+	
 	Transizione.vai("res://game/CompleteSong.tscn", "gioco", {
-		"file_canzone": canzone,
+		"canzone_suonata": canzone,
 		"note_prese": note_prese,
-		"note_totali": campo.totali,
+		"monete_guadagnate" : game_header.label.text.to_int()
 	})
 
 
