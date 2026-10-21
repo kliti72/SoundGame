@@ -3,8 +3,14 @@ Del gioco certo:
 - Rendere i background diversi per canzone
 - Dare Coerenza e sistemare l'interazione con il cap BRO
 
-
-
+nome: Sound Of The Trap
+dominio: 
+	soundthetrap , 
+	soundofthetrap, 
+	gameoftrapsound, 
+	soundofgramtrap
+	
+	
 # refl
 
 Stavo sistemato il personaggio, la comunciazione, presetazione, cosa fa e cosa consiglia al player e la trama che segue.
