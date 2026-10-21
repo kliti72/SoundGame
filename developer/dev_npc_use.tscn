@@ -1,0 +1,78 @@
+[gd_scene format=3 uid="uid://ch01nx4tmnfth"]
+
+[ext_resource type="Script" uid="uid://clfin4vl58efa" path="res://developer/npc_to_delete.gd" id="1_5wqcp"]
+[ext_resource type="Theme" uid="uid://ct1np73j88naj" path="res://theme/Trapur.tres" id="2_yb7w0"]
+[ext_resource type="Script" uid="uid://cq6p626un4475" path="res://scripts/asset/FumettoTrap.gd" id="3_10nbn"]
+[ext_resource type="FontFile" uid="uid://ddc2pwfrct7ga" path="res://fonts/Traptur.otf" id="4_78clk"]
+[ext_resource type="Script" uid="uid://cy7726fddq5ky" path="res://scripts/asset/Personaggio.gd" id="5_j64b0"]
+
+[node name="TestSceneInteraction" type="Node2D" unique_id=763451875]
+script = ExtResource("1_5wqcp")
+
+[node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=472584416]
+
+[node name="Control2" type="Control" parent="CanvasLayer" unique_id=1802457541]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme = ExtResource("2_yb7w0")
+
+[node name="MarginContainer" type="MarginContainer" parent="CanvasLayer/Control2" unique_id=2085448754]
+z_index = 10
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_constants/margin_bottom = 20
+
+[node name="Fumetto" type="PanelContainer" parent="CanvasLayer/Control2/MarginContainer" unique_id=834559499 node_paths=PackedStringArray("Canvas_Padre", "Teppistello")]
+layout_mode = 2
+mouse_filter = 2
+script = ExtResource("3_10nbn")
+font = ExtResource("4_78clk")
+dimensione_font = 35
+colore_neon = Color(0.5541121, 0, 0.10718591, 1)
+Canvas_Padre = NodePath("../../..")
+Teppistello = NodePath("../../../Control/MarginContainer/Personaggio")
+metadata/_custom_type_script = "uid://cq6p626un4475"
+
+[node name="Control" type="Control" parent="CanvasLayer" unique_id=991309346]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="CanvasLayer/Control" unique_id=1038500683]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -320.0
+offset_top = -380.0
+grow_horizontal = 0
+grow_vertical = 0
+theme_override_constants/margin_bottom = -80
+
+[node name="Personaggio" type="Control" parent="CanvasLayer/Control/MarginContainer" unique_id=1462507237 node_paths=PackedStringArray("fumetto")]
+custom_minimum_size = Vector2(640, 760)
+layout_mode = 2
+mouse_filter = 2
+script = ExtResource("5_j64b0")
+dimensione_personaggio = Vector2(540, 660)
+parla_all_avvio = true
+font = ExtResource("4_78clk")
+colore_testo = Color(0.25743568, 0.12456282, 0.08173273, 1)
+fumetto = NodePath("../../../Control2/MarginContainer/Fumetto")

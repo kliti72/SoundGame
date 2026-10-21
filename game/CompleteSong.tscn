@@ -2,7 +2,7 @@
 
 [ext_resource type="Theme" uid="uid://ct1np73j88naj" path="res://theme/Trapur.tres" id="1_0kv4e"]
 [ext_resource type="Script" uid="uid://bwxe8terenwvo" path="res://scripts/core/CompleteSong.gd" id="1_0tehi"]
-[ext_resource type="PackedScene" uid="uid://uyhhodkibpj6" path="res://scripts/backgroundTheme/Scene/SceneGlitchMonitorTheme.tscn" id="1_0yhwr"]
+[ext_resource type="PackedScene" uid="uid://uyhhodkibpj6" path="res://game/sfondi/SceneGlitchMonitorTheme.tscn" id="1_0yhwr"]
 [ext_resource type="Script" uid="uid://w6ugp1n754km" path="res://scripts/asset/ProgressBarStyle.gd" id="3_4jaaw"]
 [ext_resource type="Script" uid="uid://dgfx83f7xbqlc" path="res://scripts/asset/capellini_monete.gd" id="3_6cla0"]
 [ext_resource type="FontFile" uid="uid://ddc2pwfrct7ga" path="res://fonts/Traptur.otf" id="5_y7w8l"]
@@ -89,6 +89,7 @@ size_flags_vertical = 4
 theme_override_styles/background = SubResource("StyleBoxEmpty_y7w8l")
 theme_override_styles/fill = SubResource("StyleBoxEmpty_6eiyk")
 value = 50.0
+show_percentage = false
 script = ExtResource("3_4jaaw")
 text_font = ExtResource("5_y7w8l")
 text_size = 50

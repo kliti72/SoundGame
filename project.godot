@@ -17,12 +17,12 @@ config/icon="res://icon.svg"
 
 [autoload]
 
-QuitMenu="*uid://bb47k3q0nkdbg"
 Player="*uid://btc3io2bxw8jx"
 Transizione="*uid://bres71oey88lg"
 MusicaGlobale="*uid://btj4dvjoi3n73"
 DialogoMemoria="*uid://n06jtmjcvlt8"
 Notifica="*uid://7086xe6bsyvy"
+Piattaforma="*uid://cbst55ycnhek"
 
 [display]
 

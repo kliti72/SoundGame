@@ -12,8 +12,9 @@ const TOLLERANZA := 0.15     # quanto dopo t la nota resta cliccabile prima del 
 const MARGINE := RAGGIO * 1.5   # quanto fuori dallo schermo parte il simbolo
 # Frazione di APPROCCIO alla quale il simbolo è arrivato; il resto è "assestamento" (ali/occhi, rimbalzo)
 const ATTERRAGGIO := {"bordo": 0.75, "caduta": 0.85}
-const LETTERE := "QWERTYUIOPASDFGHJKLZXCVBNM"
+const LETTERE := "ASDFGHJKLQPWOEIRUTYMZNXCBV"
 const TONI := [Color(0.92, 0.92, 0.92), Color(0.55, 0.55, 0.55), Color(0.30, 0.30, 0.30)]
+var mostra_lettere := not Piattaforma.is_mobile
 
 var simbolo_default: String = SimboliNote.DEFAULT   # per le note senza "simbolo" nel JSON
 var note: Array = []
@@ -25,6 +26,7 @@ var _onde: Array = []
 
 
 func _ready() -> void:
+	
 	set_process(false)
 	set_process_input(false)
 
@@ -123,10 +125,17 @@ func _prova_tasto(lettera: String) -> void:
 		_colpisci(migliore)
 
 
+const VIBRAZIONE_MS := 20   # corta, sennò con le note veloci ti trema il telefono
+var vibrazione_attiva := true   # collegabile a un'opzione nelle impostazioni
+
 func _colpisci(n: Dictionary) -> void:
 	note.erase(n)
+	_vibra()
 	colpita.emit(n)
 
+func _vibra() -> void:
+	if vibrazione_attiva and OS.has_feature("mobile"):
+		Input.vibrate_handheld(VIBRAZIONE_MS)
 
 func _cliccabile(n: Dictionary) -> bool:
 	var resta: float = n.t - tempo
@@ -208,9 +217,10 @@ func _draw() -> void:
 		draw_arc(n.pos, maxf(r_app, r), 0.0, TAU, 64, Color(1, 1, 1, a * 0.5), 2.5, true)
 
 		# lettera centrata sul simbolo
-		var w := font.get_string_size(n.lettera, HORIZONTAL_ALIGNMENT_LEFT, -1, DIM_FONT).x
-		var y_off := (font.get_ascent(DIM_FONT) - font.get_descent(DIM_FONT)) / 2.0
-		draw_string(font, pos + Vector2(-w / 2.0, y_off), n.lettera, HORIZONTAL_ALIGNMENT_LEFT, -1, DIM_FONT, Color(1, 1, 1, a * 0.45))
+		if mostra_lettere:
+			var w := font.get_string_size(n.lettera, HORIZONTAL_ALIGNMENT_LEFT, -1, DIM_FONT).x
+			var y_off := (font.get_ascent(DIM_FONT) - font.get_descent(DIM_FONT)) / 2.0
+			draw_string(font, pos + Vector2(-w / 2.0, y_off), n.lettera, HORIZONTAL_ALIGNMENT_LEFT, -1, DIM_FONT, Color(1, 1, 1, a * 0.45))
 
 	# Onde alla pressione: 3 anelli che si espandono sfalsati
 	for o in _onde:

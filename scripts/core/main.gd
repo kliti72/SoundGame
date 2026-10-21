@@ -5,22 +5,25 @@ extends Node2D
 @export var canzone := "Boombap.mp3"
 @export_range(0, 5) var sfondo_uso := 0   # 0 = casuale, 1..5 = sfondo fisso
 ## Tipo di note (usato per le note senza "simbolo" nel JSON). Tieni allineato con SimboliNote.ELENCO
-@export_enum("pipistrello", "cerchio", "pillola") var tipo_note := "pillola"
+@export_enum("pipistrello", "cerchio", "pillola") var tipo_note := "pipistrello"
 
 signal pause_premuto
+signal bottone_riprova_premuto
 
 @onready var musica: AudioStreamPlayer = $AudioStreamPlayer
-@onready var sfondi: Array = [$SceneGlitchMonitorTheme, $BackgroundCity, $BackgroundRedWaterScene, $BackgroundForestRain, $BackgroundGraffitiWall]
 @onready var game_header: Control = $CanvasLayer/GameHeader
 @onready var _npc: Personaggio = $ManagerTeppistello/Control/MarginContainer/Personaggio
 @onready var manager_tep: CanvasLayer = $ManagerTeppistello
 @onready var pause_button : Button = $CanvasLayer/MarginContainer2/MarginContainer/PauseButton
+# PauseManager.gd (extends Node)
+@onready var pause_scene: Control = $PauseGame/Control
 
-const VELOCITA := [0.5, 0.3, 3.0, 0.5, 0.5]   # una per sfondo, nello stesso ordine
+	
+@onready var bottone_riprova : Button = $PauseGame/Control/MarginContainer/VBoxContainer/RestartLevelButton
+
 const PALETTE := [Color(1.0, 0.1, 0.15), Color(0.6, 0.2, 1.0), Color(0.1, 0.9, 1.0)]
 const NOTE_NPC := 3                            # alla quale nota parla l'NPC
 
-var sfondo
 var campo: CampoNote
 var cam: Camera2D
 var punteggio := 0
@@ -29,10 +32,32 @@ var serie := 0
 var soglia := randi_range(3, 5)
 var note_prese := 0
 
+# Gestione sfondi
+const SFONDI := [
+	"res://game/sfondi/BackgroundForestRain.tscn",
+	"res://game/sfondi/BackgroundGraffitiWall.tscn",
+	"res://game/sfondi/SceneGlitchMonitorTheme.tscn",
+	"res://game/sfondi/SceneMoonWithCity.tscn",
+	"res://game/sfondi/SceneRedStreetCity.tscn"
+]
 
+const VELOCITA := [0.5, 0.3, 3.0, 0.5, 0.5]
+
+var sfondo
+
+func _carica_sfondo() -> void:
+	var idx: int = SongDB.sfondo_di(canzone)
+	var scelta := idx - 1 if idx > 0 else randi() % SFONDI.size()
+	sfondo = load(SFONDI[scelta]).instantiate()
+	sfondo.velocita = VELOCITA[scelta]
+	add_child(sfondo)
+	move_child(sfondo, 0)
+	
 func _ready() -> void:
 	MusicaGlobale.stop(0.5)
-	_scegli_sfondo()
+	_carica_sfondo()
+	pause_scene.visible = false                       # parte nascosta
+	pause_scene.process_mode = Node.PROCESS_MODE_ALWAYS  # sennò i bottoni non rispondono in pausa
 
 	campo = CampoNote.new()
 	campo.simbolo_default = tipo_note
@@ -41,7 +66,7 @@ func _ready() -> void:
 		return
 	campo.colpita.connect(_on_colpita)
 	campo.mancata.connect(_on_mancata)
-
+	
 	cam = Camera2D.new()
 	cam.position = get_viewport_rect().size / 2.0
 	add_child(cam)
@@ -54,20 +79,16 @@ func _ready() -> void:
 	
 	pause_button.pressed.connect(on_pause_button)
 
-func on_pause_button():
-	pause_premuto.emit()  
-	Transizione.vai("res://game/GameSongSelectorPage.tscn")
-	queue_free()           # chiude la scena corrente
 
+func resume():
+	pause_scene.visible = false
+	get_tree().paused = false
 
-
-func _scegli_sfondo() -> void:
-	var scelta := sfondo_uso - 1 if sfondo_uso > 0 else randi() % sfondi.size()
-	sfondo = sfondi[scelta]
-	for i in sfondi.size():
-		if i != scelta:
-			sfondi[i].queue_free()
-	sfondo.velocita = VELOCITA[scelta]
+func on_pause_button() -> void:
+	pause_scene.visible = true
+	get_tree().paused = true
+	
+	
 
 
 # --- Eventi delle note ---------------------------------------------------------

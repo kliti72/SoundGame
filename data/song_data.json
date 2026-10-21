@@ -1225,7 +1225,7 @@
 				}
 			],
 			"prezzo": 10.0,
-			"sfondo": 1.0,
+			"sfondo": 2,
 			"titolo": "InBound"
 		},
 		{
@@ -2019,7 +2019,7 @@
 				}
 			],
 			"prezzo": 300.0,
-			"sfondo": 3.0,
+			"sfondo": 3,
 			"titolo": "BrokenIndie"
 		},
 		{
@@ -2938,7 +2938,7 @@
 				}
 			],
 			"prezzo": 600.0,
-			"sfondo": 1.0,
+			"sfondo": 4,
 			"titolo": "Apalonbeats"
 		},
 		{
@@ -3622,7 +3622,7 @@
 				}
 			],
 			"prezzo": 1233.0,
-			"sfondo": 1.0,
+			"sfondo": 5,
 			"titolo": "ReverseFlex"
 		},
 		{
@@ -4196,7 +4196,7 @@
 				}
 			],
 			"prezzo": 2333.0,
-			"sfondo": 1.0,
+			"sfondo": 1,
 			"titolo": "Solarflex"
 		},
 		{
@@ -4690,7 +4690,7 @@
 				}
 			],
 			"prezzo": 2555.0,
-			"sfondo": 1.0,
+			"sfondo": 2,
 			"titolo": "TreeTime"
 		},
 		{
@@ -5464,7 +5464,7 @@
 				}
 			],
 			"prezzo": 4500.0,
-			"sfondo": 4.0,
+			"sfondo": 3,
 			"titolo": "Darkout"
 		},
 		{

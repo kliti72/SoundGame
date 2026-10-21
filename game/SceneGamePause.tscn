@@ -1,9 +1,12 @@
 [gd_scene format=3 uid="uid://bvyb7fts72hmh"]
 
-[ext_resource type="Theme" uid="uid://ct1np73j88naj" path="res://theme/Trapur.tres" id="1_feabw"]
-[ext_resource type="Script" uid="uid://dgfx83f7xbqlc" path="res://scripts/asset/capellini_monete.gd" id="2_ecnjg"]
+[ext_resource type="Theme" uid="uid://ct1np73j88naj" path="res://theme/Trapur.tres" id="1_jicqw"]
+[ext_resource type="Script" uid="uid://d35gqrlv2qdqk" path="res://scripts/core/PauseManager.gd" id="1_n7k4e"]
+[ext_resource type="Script" uid="uid://dgfx83f7xbqlc" path="res://scripts/asset/capellini_monete.gd" id="2_n7k4e"]
+[ext_resource type="Script" uid="uid://vlu14j1ensop" path="res://scripts/asset/HoverTrap.gd" id="4_apnbt"]
 
-[node name="Menu" type="CanvasLayer" unique_id=1687104973]
+[node name="Menu" type="Node" unique_id=958039693]
+script = ExtResource("1_n7k4e")
 
 [node name="Control" type="Control" parent="." unique_id=1591175269]
 layout_mode = 3
@@ -12,7 +15,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-theme = ExtResource("1_feabw")
+theme = ExtResource("1_jicqw")
 
 [node name="MarginContainer" type="MarginContainer" parent="Control" unique_id=1375409561]
 layout_mode = 1
@@ -34,7 +37,7 @@ layout_mode = 2
 [node name="Control" type="Control" parent="Control/MarginContainer/VBoxContainer" unique_id=363757232]
 custom_minimum_size = Vector2(56, 40)
 layout_mode = 2
-script = ExtResource("2_ecnjg")
+script = ExtResource("2_n7k4e")
 testo = "MENU"
 
 [node name="MarginContainer" type="MarginContainer" parent="Control/MarginContainer/VBoxContainer" unique_id=127944416]
@@ -43,9 +46,25 @@ theme_override_constants/margin_top = -8
 
 [node name="PauseLabel" type="Label" parent="Control/MarginContainer/VBoxContainer/MarginContainer" unique_id=1114094425]
 layout_mode = 2
-theme_override_font_sizes/font_size = 120
+theme_override_font_sizes/font_size = 150
 text = "PAUSE"
 horizontal_alignment = 1
+
+[node name="Continue" type="Button" parent="Control/MarginContainer/VBoxContainer" unique_id=1622330012]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.9019608, 0.22352941, 0.27450982, 1)
+theme_override_colors/font_focus_color = Color(0.3036787, 0.032259487, 0.059320293, 1)
+theme_override_colors/font_pressed_color = Color(0.3019608, 0.03137255, 0.05882353, 1)
+theme_override_colors/font_hover_color = Color(0.3019608, 0.03137255, 0.05882353, 1)
+theme_override_colors/font_hover_pressed_color = Color(0.3019608, 0.03137255, 0.05882353, 1)
+theme_override_colors/icon_pressed_color = Color(0.3019608, 0.03137255, 0.05882353, 1)
+theme_override_font_sizes/font_size = 50
+text = "Resume The Game"
+flat = true
+
+[node name="HoverTrap" type="Node" parent="Control/MarginContainer/VBoxContainer/Continue" unique_id=1985542506]
+script = ExtResource("4_apnbt")
+metadata/_custom_type_script = "uid://vlu14j1ensop"
 
 [node name="RestartLevelButton" type="Button" parent="Control/MarginContainer/VBoxContainer" unique_id=267288750]
 layout_mode = 2
@@ -59,6 +78,10 @@ theme_override_font_sizes/font_size = 50
 text = "RETRY LEVEL"
 flat = true
 
+[node name="HoverTrap" type="Node" parent="Control/MarginContainer/VBoxContainer/RestartLevelButton" unique_id=334842620]
+script = ExtResource("4_apnbt")
+metadata/_custom_type_script = "uid://vlu14j1ensop"
+
 [node name="GoMenuButton" type="Button" parent="Control/MarginContainer/VBoxContainer" unique_id=2084015226]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.9019608, 0.22352941, 0.27450982, 1)
@@ -68,5 +91,9 @@ theme_override_colors/font_hover_color = Color(0.3019608, 0.03137255, 0.05882353
 theme_override_colors/font_hover_pressed_color = Color(0.3019608, 0.03137255, 0.05882353, 1)
 theme_override_colors/icon_pressed_color = Color(0.3019608, 0.03137255, 0.05882353, 1)
 theme_override_font_sizes/font_size = 50
-text = "Menu"
+text = "MENU"
 flat = true
+
+[node name="HoverTrap" type="Node" parent="Control/MarginContainer/VBoxContainer/GoMenuButton" unique_id=1658759113]
+script = ExtResource("4_apnbt")
+metadata/_custom_type_script = "uid://vlu14j1ensop"

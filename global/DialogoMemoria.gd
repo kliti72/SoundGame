@@ -1,6 +1,6 @@
 extends Node
 
-const PATH := "user://dialoghi.json"
+const PATH := "user://dialoghi2.json"
 var _stato: Dictionary = {}
 var demo : bool = false;
 

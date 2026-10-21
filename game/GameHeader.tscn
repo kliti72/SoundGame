@@ -52,5 +52,5 @@ layout_mode = 2
 [node name="Punteggio" type="Label" parent="MarginContainer/VBoxContainer/HBoxContainer" unique_id=508248331]
 layout_mode = 2
 theme_override_font_sizes/font_size = 60
-text = "9999"
+text = "00"
 horizontal_alignment = 1

@@ -1,0 +1,67 @@
+[gd_scene format=3 uid="uid://d1wao6ttcxuu1"]
+
+[ext_resource type="Theme" uid="uid://ct1np73j88naj" path="res://theme/Trapur.tres" id="1_tfwlt"]
+[ext_resource type="StyleBox" uid="uid://uvm6f0mrxtnv" path="res://theme/ChoiceInputStyleButton.tres" id="4_poma4"]
+[ext_resource type="Texture2D" uid="uid://sa58an4wlyfy" path="res://resource/icon/left-click.png" id="4_xe4uv"]
+[ext_resource type="Texture2D" uid="uid://d0aa4m5kl286u" path="res://resource/icon/keyboard.png" id="5_poma4"]
+
+[node name="SceneChoiceInputGameplay" type="Control" unique_id=1598687172]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("1_tfwlt")
+
+[node name="MarginContainer" type="MarginContainer" parent="." unique_id=1582674]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 20
+theme_override_constants/margin_top = 20
+theme_override_constants/margin_right = 20
+theme_override_constants/margin_bottom = 20
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer" unique_id=477501845]
+layout_mode = 2
+size_flags_horizontal = 4
+
+[node name="Titolo" type="Label" parent="MarginContainer/VBoxContainer" unique_id=1739723218]
+layout_mode = 2
+theme_override_font_sizes/font_size = 120
+text = "Select Your Game Mode"
+horizontal_alignment = 1
+
+[node name="Descrizione" type="Label" parent="MarginContainer/VBoxContainer" unique_id=1092643981]
+layout_mode = 2
+text = "Scegli come V"
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/VBoxContainer" unique_id=1752219387]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 6
+
+[node name="Mouse2" type="Button" parent="MarginContainer/VBoxContainer/HBoxContainer" unique_id=1169556155]
+layout_mode = 2
+theme_override_constants/icon_max_width = 80
+theme_override_styles/normal = ExtResource("4_poma4")
+theme_override_styles/hover = ExtResource("4_poma4")
+text = "Mouse"
+icon = ExtResource("4_xe4uv")
+icon_alignment = 1
+vertical_icon_alignment = 0
+
+[node name="Tastiera" type="Button" parent="MarginContainer/VBoxContainer/HBoxContainer" unique_id=1009520312]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/icon_max_width = 80
+theme_override_styles/normal = ExtResource("4_poma4")
+theme_override_styles/hover = ExtResource("4_poma4")
+text = "TASTIERA"
+icon = ExtResource("5_poma4")
+icon_alignment = 1
+vertical_icon_alignment = 0

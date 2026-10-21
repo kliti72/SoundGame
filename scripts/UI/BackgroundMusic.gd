@@ -1,12 +1,10 @@
 extends Node
 
 @onready var npc: Personaggio = $CanvasLayer/Control/MarginContainer/Personaggio
-@onready var _tep : Personaggio = $CanvasLayer/Control/MarginContainer/Personaggio
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	MusicaGlobale.start(2.5)
-	_tep.segui_musica(true, 140, MusicaGlobale.bus)
 	await npc.parla(
 	"benvenuto_ok", [
 		"Yo! Fra!, Che ci fai da queste parti?", 

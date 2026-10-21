@@ -1,29 +1,18 @@
 [gd_scene format=3 uid="uid://ctu5tflxvtt3v"]
 
 [ext_resource type="Script" uid="uid://sxs20rpli1wg" path="res://scripts/core/main.gd" id="1_tv15p"]
-[ext_resource type="PackedScene" uid="uid://cfcou3dl2fbag" path="res://scripts/backgroundTheme/Scene/SceneMoonWithCity.tscn" id="2_4ka8g"]
-[ext_resource type="PackedScene" uid="uid://dr4w2xikrexlr" path="res://scripts/backgroundTheme/Scene/SceneRedStreetCity.tscn" id="3_7ljso"]
-[ext_resource type="PackedScene" uid="uid://uyhhodkibpj6" path="res://scripts/backgroundTheme/Scene/SceneGlitchMonitorTheme.tscn" id="4_vf36u"]
-[ext_resource type="PackedScene" uid="uid://bmudy8inw01md" path="res://scripts/backgroundTheme/Scene/BackgroundForestRain.tscn" id="5_4ka8g"]
-[ext_resource type="PackedScene" uid="uid://dhg44ndqnmeo4" path="res://scripts/backgroundTheme/Scene/BackgroundGraffitiWall.tscn" id="6_7ljso"]
 [ext_resource type="PackedScene" uid="uid://sugn4xvjetyi" path="res://game/GameHeader.tscn" id="7_vf36u"]
 [ext_resource type="Texture2D" uid="uid://c3xrn0efd0qe8" path="res://resource/icon/pause.jpg" id="8_iehov"]
-[ext_resource type="PackedScene" uid="uid://msh8aewypy42" path="res://game/component/Teppistello.tscn" id="8_tv15p"]
+[ext_resource type="PackedScene" uid="uid://bvyb7fts72hmh" path="res://game/SceneGamePause.tscn" id="8_tv15p"]
+[ext_resource type="Theme" uid="uid://ct1np73j88naj" path="res://theme/Trapur.tres" id="9_6llsg"]
+[ext_resource type="Script" uid="uid://cq6p626un4475" path="res://scripts/asset/FumettoTrap.gd" id="10_1ee86"]
+[ext_resource type="FontFile" uid="uid://ddc2pwfrct7ga" path="res://fonts/Traptur.otf" id="11_6mre7"]
+[ext_resource type="Script" uid="uid://cy7726fddq5ky" path="res://scripts/asset/Personaggio.gd" id="12_k0jkb"]
 
 [node name="CoreGame" type="Node2D" unique_id=1644826644]
 script = ExtResource("1_tv15p")
 
 [node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="." unique_id=923086508]
-
-[node name="BackgroundCity" parent="." unique_id=305812376 instance=ExtResource("2_4ka8g")]
-
-[node name="BackgroundRedWaterScene" parent="." unique_id=1137274255 instance=ExtResource("3_7ljso")]
-
-[node name="SceneGlitchMonitorTheme" parent="." unique_id=1456825680 instance=ExtResource("4_vf36u")]
-
-[node name="BackgroundForestRain" parent="." unique_id=44597416 instance=ExtResource("5_4ka8g")]
-
-[node name="BackgroundGraffitiWall" parent="." unique_id=837288818 instance=ExtResource("6_7ljso")]
 
 [node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=268710997]
 
@@ -55,4 +44,72 @@ flat = true
 icon_alignment = 2
 expand_icon = true
 
-[node name="ManagerTeppistello" parent="." unique_id=1297301811 instance=ExtResource("8_tv15p")]
+[node name="ManagerTeppistello" type="CanvasLayer" parent="." unique_id=1537721367]
+
+[node name="Control2" type="Control" parent="ManagerTeppistello" unique_id=1259438360]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme = ExtResource("9_6llsg")
+
+[node name="MarginContainer" type="MarginContainer" parent="ManagerTeppistello/Control2" unique_id=1210208142]
+z_index = 10
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_constants/margin_bottom = 20
+
+[node name="Fumetto" type="PanelContainer" parent="ManagerTeppistello/Control2/MarginContainer" unique_id=1562136930 node_paths=PackedStringArray("Canvas_Padre", "Teppistello")]
+layout_mode = 2
+mouse_filter = 2
+script = ExtResource("10_1ee86")
+Canvas_Padre = NodePath("../../..")
+Teppistello = NodePath("../../../Control/MarginContainer/Personaggio")
+font = ExtResource("11_6mre7")
+dimensione_font = 35
+colore_neon = Color(0.5541121, 0, 0.10718591, 1)
+metadata/_custom_type_script = "uid://cq6p626un4475"
+
+[node name="Control" type="Control" parent="ManagerTeppistello" unique_id=1164835821]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="ManagerTeppistello/Control" unique_id=1538344282]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -320.0
+offset_top = -380.0
+grow_horizontal = 0
+grow_vertical = 0
+theme_override_constants/margin_bottom = -80
+
+[node name="Personaggio" type="Control" parent="ManagerTeppistello/Control/MarginContainer" unique_id=1392051640 node_paths=PackedStringArray("fumetto")]
+custom_minimum_size = Vector2(640, 760)
+layout_mode = 2
+mouse_filter = 2
+script = ExtResource("12_k0jkb")
+dimensione_personaggio = Vector2(540, 660)
+parla_all_avvio = true
+font = ExtResource("11_6mre7")
+colore_testo = Color(0.25743568, 0.12456282, 0.08173273, 1)
+fumetto = NodePath("../../../Control2/MarginContainer/Fumetto")
+
+[node name="PauseGame" parent="." unique_id=958039693 instance=ExtResource("8_tv15p")]

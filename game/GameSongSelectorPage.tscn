@@ -14,14 +14,16 @@
 [ext_resource type="StyleBox" uid="uid://c2isg054jxoc8" path="res://fonts/new_style_box_flat.tres" id="9_5u5fu"]
 [ext_resource type="Script" uid="uid://b3rq7wu8y0jw3" path="res://scripts/asset/vinile_style.gd" id="9_jjtco"]
 [ext_resource type="Script" uid="uid://buo8poa3u1gqf" path="res://scripts/backgroundTheme/Script/WhiteBackground.gd" id="9_n6qt4"]
-[ext_resource type="PackedScene" uid="uid://msh8aewypy42" path="res://game/component/Teppistello.tscn" id="10_dc8yc"]
 [ext_resource type="Script" uid="uid://vlu14j1ensop" path="res://scripts/asset/HoverTrap.gd" id="12_4o3ff"]
-
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_evofe"]
+[ext_resource type="Script" uid="uid://cq6p626un4475" path="res://scripts/asset/FumettoTrap.gd" id="16_ff6bv"]
+[ext_resource type="FontFile" uid="uid://ddc2pwfrct7ga" path="res://fonts/Traptur.otf" id="17_v5n0t"]
+[ext_resource type="Script" uid="uid://cy7726fddq5ky" path="res://scripts/asset/Personaggio.gd" id="18_lyhfc"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_ff6bv"]
 
-[sub_resource type="Shader" id="Shader_v5n0t"]
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_v5n0t"]
+
+[sub_resource type="Shader" id="Shader_lyhfc"]
 code = "
 shader_type canvas_item;
 
@@ -81,27 +83,27 @@ void fragment() {
 }
 "
 
-[sub_resource type="FastNoiseLite" id="FastNoiseLite_lyhfc"]
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_y4ned"]
 
-[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_y4ned"]
-noise = SubResource("FastNoiseLite_lyhfc")
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_dxbyo"]
+noise = SubResource("FastNoiseLite_y4ned")
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_dxbyo"]
-shader = SubResource("Shader_v5n0t")
-shader_parameter/angle = 5.378829552307533
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_ricob"]
+shader = SubResource("Shader_lyhfc")
+shader_parameter/angle = 5.440371180506874
 shader_parameter/label_radius = 0.34
 shader_parameter/hole_radius = 0.03
 shader_parameter/groove_freq = 140.0
 shader_parameter/vinyl_color = Color(0.03137255, 0.03137255, 0.03137255, 1)
 shader_parameter/sheen_strength = 0.18
-shader_parameter/noise = SubResource("NoiseTexture2D_y4ned")
+shader_parameter/noise = SubResource("NoiseTexture2D_dxbyo")
 shader_parameter/progress = 0.0
 shader_parameter/fuoco = Color(1, 0.35, 0, 1)
 shader_parameter/larghezza = 0.15
 
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_ricob"]
-
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_xexs3"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_8vhm8"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_h4mvk"]
 
@@ -214,8 +216,8 @@ livello = 3
 visible = false
 z_index = 10
 layout_mode = 2
-theme_override_styles/background = SubResource("StyleBoxEmpty_evofe")
-theme_override_styles/fill = SubResource("StyleBoxEmpty_ff6bv")
+theme_override_styles/background = SubResource("StyleBoxEmpty_ff6bv")
+theme_override_styles/fill = SubResource("StyleBoxEmpty_v5n0t")
 step = 0.0
 value = 60.0
 show_percentage = false
@@ -263,7 +265,7 @@ theme_override_constants/margin_right = 5
 theme_override_constants/margin_bottom = 5
 
 [node name="TextureRect" type="TextureRect" parent="Control/VBoxContainer/CenterContainer/VBoxContainer/ImageReact" unique_id=87801007]
-material = SubResource("ShaderMaterial_dxbyo")
+material = SubResource("ShaderMaterial_ricob")
 custom_minimum_size = Vector2(330, 330)
 custom_maximum_size = Vector2(330, 330)
 layout_mode = 2
@@ -314,8 +316,8 @@ theme_override_constants/margin_bottom = -15
 custom_minimum_size = Vector2(50, 80)
 layout_mode = 2
 size_flags_horizontal = 3
-theme_override_styles/background = SubResource("StyleBoxEmpty_ricob")
-theme_override_styles/fill = SubResource("StyleBoxEmpty_xexs3")
+theme_override_styles/background = SubResource("StyleBoxEmpty_xexs3")
+theme_override_styles/fill = SubResource("StyleBoxEmpty_8vhm8")
 step = 50.0
 value = 50.0
 show_percentage = false
@@ -396,4 +398,70 @@ offset_right = 40.0
 offset_bottom = 40.0
 script = ExtResource("9_n6qt4")
 
-[node name="Teppistello" parent="." unique_id=1297301811 instance=ExtResource("10_dc8yc")]
+[node name="Teppistello" type="CanvasLayer" parent="." unique_id=1732604197]
+
+[node name="Control2" type="Control" parent="Teppistello" unique_id=352621645]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme = ExtResource("1_d8hw3")
+
+[node name="MarginContainer" type="MarginContainer" parent="Teppistello/Control2" unique_id=610631385]
+z_index = 10
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_constants/margin_bottom = 20
+
+[node name="Fumetto" type="PanelContainer" parent="Teppistello/Control2/MarginContainer" unique_id=1259667882 node_paths=PackedStringArray("Canvas_Padre", "Teppistello")]
+layout_mode = 2
+mouse_filter = 2
+script = ExtResource("16_ff6bv")
+Canvas_Padre = NodePath("../../..")
+Teppistello = NodePath("../../../Control/MarginContainer/Personaggio")
+font = ExtResource("17_v5n0t")
+dimensione_font = 35
+colore_neon = Color(0.5541121, 0, 0.10718591, 1)
+metadata/_custom_type_script = "uid://cq6p626un4475"
+
+[node name="Control" type="Control" parent="Teppistello" unique_id=28757246]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="Teppistello/Control" unique_id=698818414]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -320.0
+offset_top = -380.0
+grow_horizontal = 0
+grow_vertical = 0
+theme_override_constants/margin_bottom = -80
+
+[node name="Personaggio" type="Control" parent="Teppistello/Control/MarginContainer" unique_id=1935919794 node_paths=PackedStringArray("fumetto")]
+custom_minimum_size = Vector2(640, 760)
+layout_mode = 2
+mouse_filter = 2
+script = ExtResource("18_lyhfc")
+dimensione_personaggio = Vector2(540, 660)
+parla_all_avvio = true
+font = ExtResource("17_v5n0t")
+colore_testo = Color(0.25743568, 0.12456282, 0.08173273, 1)
+fumetto = NodePath("../../../Control2/MarginContainer/Fumetto")
