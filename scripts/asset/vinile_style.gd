@@ -10,6 +10,17 @@ extends TextureRect
 @export var vinyl_color: Color = Color("080808")
 @export_range(0.0, 0.5) var sheen_strength: float = 0.18
 
+@export var bloccata: bool = false:
+	set(v):
+		bloccata = v
+		if is_node_ready():
+			_aggiorna_blocco()
+@export_range(0.3, 1.0) var cover_visibile: float = 0.8:   # quanta larghezza copre la cover
+	set(v):
+		cover_visibile = v
+		_adatta_cover()
+@export_range(0.0, 1.0) var cover_dim: float = 0.0          # 0 = immagine pura, 1 = nera
+
 const SHADER_CODE := """
 shader_type canvas_item;
 
@@ -71,6 +82,9 @@ void fragment() {
 
 var _mat: ShaderMaterial
 var _angle: float = 0.0
+var _cover: Control
+var _ultima_tex: Texture2D
+
 
 func _ready() -> void:
 	expand_mode = TextureRect.EXPAND_IGNORE_SIZE
@@ -84,12 +98,22 @@ func _ready() -> void:
 	var rumore := NoiseTexture2D.new()
 	rumore.noise = FastNoiseLite.new()
 	_mat.set_shader_parameter("noise", rumore)
+
+	resized.connect(_adatta_cover)
+	_aggiorna_blocco()
 	_update_params()
+
 
 func _process(delta: float) -> void:
 	if spinning:
 		_angle = fmod(_angle + spin_speed * delta, TAU)
 	_update_params()
+
+	# se cambi texture la cover si ridisegna
+	if is_instance_valid(_cover) and texture != _ultima_tex:
+		_ultima_tex = texture
+		_cover.queue_redraw()
+
 
 func _update_params() -> void:
 	if _mat == null:
@@ -100,7 +124,64 @@ func _update_params() -> void:
 	_mat.set_shader_parameter("groove_freq", groove_freq)
 	_mat.set_shader_parameter("vinyl_color", vinyl_color)
 	_mat.set_shader_parameter("sheen_strength", sheen_strength)
-	
+
+
 func set_fuoco(v: float) -> void:
 	if _mat:
 		_mat.set_shader_parameter("progress", v)
+
+
+# ---------- COVER ----------
+
+func _aggiorna_blocco() -> void:
+	if bloccata:
+		if not is_instance_valid(_cover):
+			_crea_cover()
+		_cover.modulate.a = 1.0
+		_adatta_cover()
+	elif is_instance_valid(_cover):
+		_cover.queue_free()
+		_cover = null
+
+
+func _crea_cover() -> void:
+	_cover = Control.new()
+	_cover.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	_cover.draw.connect(_disegna_cover)
+	add_child(_cover)
+
+
+func _adatta_cover() -> void:
+	if not is_instance_valid(_cover):
+		return
+	_cover.position = Vector2.ZERO
+	_cover.size = Vector2(size.x * cover_visibile, size.y)
+	_cover.queue_redraw()
+
+
+func _disegna_cover() -> void:
+	var r := Rect2(Vector2.ZERO, _cover.size)
+	if texture:
+		var ts := texture.get_size()
+		# taglia la texture alla stessa percentuale, così non si schiaccia
+		var src := Rect2(Vector2.ZERO, Vector2(ts.x * cover_visibile, ts.y))
+		var tint := Color(1, 1, 1).darkened(cover_dim)
+		_cover.draw_texture_rect_region(texture, r, src, tint)
+	else:
+		_cover.draw_rect(r, Color("1b1b24"))
+	_cover.draw_rect(r, Color(0, 0, 0, 0.35), false, 2.0)   # bordino sottile
+
+
+func sblocca() -> void:
+	if not bloccata or not is_instance_valid(_cover):
+		return
+	var c := _cover
+	var t := create_tween().set_parallel(true)
+	t.tween_property(c, "position:x", -c.size.x, 0.6)\
+		.set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_IN)
+	t.tween_property(c, "modulate:a", 0.0, 0.6)
+	await t.finished
+	_cover = null        # prima lo scollego, poi lo elimino
+	if is_instance_valid(c):
+		c.queue_free()
+	bloccata = false

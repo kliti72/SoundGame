@@ -86,6 +86,12 @@ func registra_punteggio(file: String, punti: int) -> void:
 		s.punteggio = punti
 		salva()
 
+func leggi_punteggio(file: String) -> int:
+	var s := canzone(file)
+	if s != null:
+		return s.punteggio
+	return 0
+	
 # Regista sblocco canzone
 func sblocca_lock(titolo: String) -> bool:
 	for s in canzoni:

@@ -8,7 +8,7 @@ extends Node
 @onready var titolo_canzone: Label = $Control/VBoxContainer/CenterContainer/VBoxContainer/HBoxContainer2/MarginContainer/SongTitle
 
 # Pulsanti Scena
-@onready var start_trap_song: Button = $Control/VBoxContainer/CenterContainer/VBoxContainer/MarginContainer/StartTrapSong
+@onready var start_trap_song: Button = $Control/VBoxContainer/CenterContainer/VBoxContainer/MarginContainer/HBoxContainer/MarginContainer/StartTrapSong
 
 # Animazioni
 @onready var vinile: Vinile = $Control/VBoxContainer/CenterContainer/VBoxContainer/ImageReact/TextureRect
@@ -22,8 +22,15 @@ extends Node
 @onready var difficolta = $Control/VBoxContainer/CenterContainer/VBoxContainer/HBoxContainer2/Teschi
 @onready var rombi_rating: Control = $Control/VBoxContainer/CenterContainer/VBoxContainer/HBoxContainer/MarginContainer/RombiRating
 
+
+# Info song
+@onready var note_prese_su_totali = $Control/VBoxContainer/CenterContainer/VBoxContainer/MarginContainer2/VBoxContainer/NotePreseSuNoteTotali
+@onready var durata_totale_canzone = $Control/VBoxContainer/CenterContainer/VBoxContainer/MarginContainer2/VBoxContainer/DurataTotaleCanzone
+@onready var SongQuee = $Control/VBoxContainer/CenterContainer/VBoxContainer/MarginContainer/HBoxContainer/SongQuee
+@onready var cover_title =$Control/VBoxContainer/CenterContainer/VBoxContainer/ImageReact/TextureRect/MarginContainer/CoverTitle
 # NPC
-@onready var _npc: Personaggio = $Teppistello/Control/MarginContainer/Personaggio
+#@onready var _npc: Personaggio = $Teppistello/Control/MarginContainer/Personaggio
+
 
 const DURATA := 0.35
 
@@ -37,9 +44,6 @@ var _animando := false
 
 func _ready() -> void:
 	_carica_canzoni()
-	# Load Header Game Menu
-	player_cap.text = "%s" % Player.monete
-	
 	# Registra Action Pagina
 	start_trap_song.pressed.connect(_on_play_song_button)
 	prossima_canzone.pressed.connect(_on_next_song_pressed)
@@ -47,7 +51,7 @@ func _ready() -> void:
 	
 
 	aggiorna_pagina()
-	await _intro_npc()
+	#await _intro_npc()
 
 
 func _carica_canzoni() -> void:
@@ -56,40 +60,43 @@ func _carica_canzoni() -> void:
 		canzoni_disponibili.append(c["titolo"])
 		nomi_file.append(c["file"])
 
-
-func _intro_npc() -> void:
-	await _npc.parla("benvenuto_song", [
-		"Ecco qui bro.",
-		"Qua puoi ascoltare le mie basi.",
-		"Ci ho messo tutto me stesso fratello",
-		"Non sono un beatmatker, passo le giornate a sparare ai miei ops.",
-		"Ti faccio vedere un altra canzone",
-	], false, false, true)
-
-	_on_next_song_pressed()
-
-	await _npc.parla("benvenuto_song_buy", [
-		"Come vedi, questa me la devi pagare fratello!",
-		".. IN CAP.",
-		"E non provare a far mancare nemmeno un CAP FRATELLo",
-		"...",
-		"Che potrei lasciarti un REGALO.",
-		"...",
-		"Ora fratello, Play Musica ti fa sentire la canzone che vuoi",
-		"Ora piano piano ti faccio vedere come si gioca",
-		"...",
-		"Puoi ascoltare per ora solo mio primo beat",
-		"....",
-	], false, false, true)
-
-	_on_before_song_pressed()
-
-	await _npc.parla("benvenuto_song_buy2", [
-		"Ti lascio qui fratello, premi start e divertiti",
-	], false, false, false)
+#
+#func _intro_npc() -> void:
+	#await _npc.parla("benvenuto_song", [
+		#"Ecco qui bro.",
+		#"Qua puoi ascoltare le mie basi.",
+		#"Ci ho messo tutto me stesso fratello",
+		#"Non sono un beatmatker, passo le giornate a sparare ai miei ops.",
+		#"Ti faccio vedere un altra canzone",
+	#], false, false, true)
+#
+	#_on_next_song_pressed()
+#
+	#await _npc.parla("benvenuto_song_buy", [
+		#"Come vedi, questa me la devi pagare fratello!",
+		#".. IN CAP.",
+		#"E non provare a far mancare nemmeno un CAP FRATELLo",
+		#"...",
+		#"Che potrei lasciarti un REGALO.",
+		#"...",
+		#"Ora fratello, Play Musica ti fa sentire la canzone che vuoi",
+		#"Ora piano piano ti faccio vedere come si gioca",
+		#"...",
+		#"Puoi ascoltare per ora solo mio primo beat",
+		#"....",
+	#], false, false, true)
+#
+	#_on_before_song_pressed()
+#
+	#await _npc.parla("benvenuto_song_buy2", [
+		#"Ti lascio qui fratello, premi start e divertiti",
+	#], false, false, false)
 
 
 func aggiorna_pagina() -> void:
+	player_cap.text = "%s" % Player.monete
+
+	SongQuee.pieni = page_counter + 1;
 	if canzoni_disponibili.is_empty():
 		titolo_canzone.text = "Nessuna canzone"
 		return
@@ -98,11 +105,21 @@ func aggiorna_pagina() -> void:
 	var s := Player.canzone_per_titolo(titolo)
 
 	vinile.texture = load("res://resource/images/Tunnel_%d.png" % page_counter)
+	
 	titolo_canzone.text = titolo
-
+	cover_title.text = titolo
+	
 	var sbloccata := s != null and not s.lock
+	
 	start_trap_song.text = "Start Song" if sbloccata else "Bloccata %s" % s.price
 
+	if(sbloccata):
+		cover_title.visible = false;
+		vinile.bloccata = false;
+	else:
+		cover_title.visible = true;
+		vinile.bloccata = true;
+		
 	# Rombi: record di note prese / note totali, riportato sul numero di rombi
 	var rombi := 0
 	if s != null:
@@ -114,6 +131,11 @@ func aggiorna_pagina() -> void:
 	
 	difficolta.livello = "%s" % SongDB.difficolta_di(s.file)
 
+	titolo = titolo + ".mp3"
+	note_prese_su_totali.text = "%s / %s" % [Player.leggi_punteggio(titolo), SongDB.note_di(titolo).size()]
+	durata_totale_canzone.text = SongDB.durata_di(titolo)
+
+	
 
 func _on_next_song_pressed() -> void:
 	if page_counter < canzoni_disponibili.size() - 1:
@@ -142,7 +164,9 @@ func _on_play_song_button() -> void:
 		if Player.puo_permettersi(SongDB.prezzo_di(nomi_file[page_counter])):
 			if Player.sblocca_lock(titolo):
 				Player.spendi_monete(s.price)
-				Notifica.mostra("Canzone Sbloccata", "La canzone %s ora è disponibile nella tua libreria." % nomi_file[page_counter])
+				Notifica.mostra("Canzone Sbloccata", "La canzone %s ora è disponibile nella tua libreria." % nomi_file[page_counter])	
+				cover_title.visible = false;
+				await vinile.sblocca()
 			else:
 				Notifica.mostra("Already Unlocked", "The song is already unlocked")
 		else:

@@ -142,6 +142,13 @@ static func salva(file: String, titolo: String, note: Array, sfondo: int = SFOND
 	f.store_string(JSON.stringify(dati, "\t"))
 	f.close()
 	return true
+
+static func durata_di(file: String) -> String:
+	var stream := load(CARTELLA + file) as AudioStream
+	if stream == null:
+		return "00:00"
+	var tot := roundi(stream.get_length())
+	return "%02d:%02d" % [floori(tot / 60.0), tot % 60]
 	
 static func prezzo_di(file: String) -> int:
 	return maxi(int(trova(file).get("prezzo", 0)), 0)

@@ -98,7 +98,7 @@ func _on_colpita(n: Dictionary) -> void:
 	combo += 1
 	serie += 1
 
-	var guadagno: int = 100 * (1 + floori(combo / 10.0))
+	var guadagno: int = 3 * (1 + floori(combo / 10.0))
 	punteggio += guadagno
 
 	var colore := Color.WHITE

@@ -15,15 +15,12 @@
 [ext_resource type="Script" uid="uid://b3rq7wu8y0jw3" path="res://scripts/asset/vinile_style.gd" id="9_jjtco"]
 [ext_resource type="Script" uid="uid://buo8poa3u1gqf" path="res://scripts/backgroundTheme/Script/WhiteBackground.gd" id="9_n6qt4"]
 [ext_resource type="Script" uid="uid://vlu14j1ensop" path="res://scripts/asset/HoverTrap.gd" id="12_4o3ff"]
-[ext_resource type="Script" uid="uid://cq6p626un4475" path="res://scripts/asset/FumettoTrap.gd" id="16_ff6bv"]
-[ext_resource type="FontFile" uid="uid://ddc2pwfrct7ga" path="res://fonts/Traptur.otf" id="17_v5n0t"]
-[ext_resource type="Script" uid="uid://cy7726fddq5ky" path="res://scripts/asset/Personaggio.gd" id="18_lyhfc"]
 
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_ff6bv"]
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_jjtco"]
 
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_v5n0t"]
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_4o3ff"]
 
-[sub_resource type="Shader" id="Shader_lyhfc"]
+[sub_resource type="Shader" id="Shader_evofe"]
 code = "
 shader_type canvas_item;
 
@@ -83,27 +80,27 @@ void fragment() {
 }
 "
 
-[sub_resource type="FastNoiseLite" id="FastNoiseLite_y4ned"]
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_ff6bv"]
 
-[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_dxbyo"]
-noise = SubResource("FastNoiseLite_y4ned")
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_v5n0t"]
+noise = SubResource("FastNoiseLite_ff6bv")
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_ricob"]
-shader = SubResource("Shader_lyhfc")
-shader_parameter/angle = 5.440371180506874
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_lyhfc"]
+shader = SubResource("Shader_evofe")
+shader_parameter/angle = 5.911413177401728
 shader_parameter/label_radius = 0.34
 shader_parameter/hole_radius = 0.03
 shader_parameter/groove_freq = 140.0
 shader_parameter/vinyl_color = Color(0.03137255, 0.03137255, 0.03137255, 1)
 shader_parameter/sheen_strength = 0.18
-shader_parameter/noise = SubResource("NoiseTexture2D_dxbyo")
+shader_parameter/noise = SubResource("NoiseTexture2D_v5n0t")
 shader_parameter/progress = 0.0
 shader_parameter/fuoco = Color(1, 0.35, 0, 1)
 shader_parameter/larghezza = 0.15
 
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_xexs3"]
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_y4ned"]
 
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_8vhm8"]
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_dxbyo"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_h4mvk"]
 
@@ -114,6 +111,81 @@ shader_parameter/larghezza = 0.15
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_acf0c"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_812s5"]
+
+[sub_resource type="Shader" id="Shader_jjtco"]
+code = "
+shader_type canvas_item;
+
+uniform vec4 tinta : source_color = vec4(0.96, 0.94, 0.88, 1.0);
+uniform float bordo = 0.25;
+uniform float buio_bordo = 0.9;
+uniform float grana = 0.08;
+uniform float graffi = 0.5;
+uniform float flicker = 0.03;
+
+float hash(vec2 p) {
+	return fract(sin(dot(p, vec2(127.1, 311.7))) * 43758.5453);
+}
+
+float noise(vec2 p) {
+	vec2 i = floor(p);
+	vec2 f = fract(p);
+	f = f * f * (3.0 - 2.0 * f);
+	return mix(mix(hash(i), hash(i + vec2(1.0, 0.0)), f.x),
+	           mix(hash(i + vec2(0.0, 1.0)), hash(i + vec2(1.0, 1.0)), f.x), f.y);
+}
+
+void fragment() {
+	vec2 uv = UV;
+	vec3 col = tinta.rgb;
+
+	// macchie di carta vecchia
+	float macchie = noise(uv * vec2(5.0, 7.0)) * 0.6 + noise(uv * 22.0) * 0.4;
+	col *= 1.0 - macchie * 0.14;
+	col = mix(col, col * vec3(1.0, 0.93, 0.8), macchie * 0.5);   // ingiallimento
+
+	// grana da pellicola, cambia 12 volte al secondo
+	float t = floor(TIME * 12.0);
+	col += (hash(uv * vec2(900.0, 700.0) + t) - 0.5) * grana;
+
+	// graffi verticali che compaiono a caso
+	float slot = floor(TIME * 8.0);
+	for (int i = 0; i < 3; i++) {
+		float fi = float(i);
+		float x = hash(vec2(slot, fi));
+		float on = step(0.65, hash(vec2(slot, fi + 10.0)));
+		float h = hash(vec2(slot, fi + 20.0));
+		float line = (1.0 - smoothstep(0.0, 0.0012, abs(uv.x + (noise(vec2(uv.y * 30.0, fi)) - 0.5) * 0.004 - x)));
+		line *= on * step(abs(uv.y - h), 0.35);
+		col -= line * graffi * 0.35;
+	}
+
+	// polvere
+	float polvere = step(0.9985, hash(floor(uv * vec2(260.0, 160.0)) + slot));
+	col -= polvere * graffi * 0.4;
+
+	// bordi neri sfumati ai lati
+	float lato = smoothstep(0.0, bordo, uv.x) * smoothstep(0.0, bordo, 1.0 - uv.x);
+	lato = pow(lato, 1.4);
+	float angoli = smoothstep(0.0, 0.18, uv.y) * smoothstep(0.0, 0.18, 1.0 - uv.y);
+	float luce = mix(lato, lato * angoli, 0.35);
+	col = mix(vec3(0.0), col, 1.0 - (1.0 - luce) * buio_bordo);
+
+	// tremolio di luce
+	col *= 1.0 + (hash(vec2(floor(TIME * 14.0), 3.0)) - 0.5) * flicker * 2.0;
+
+	COLOR = vec4(col, 1.0);
+}
+"
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_4o3ff"]
+shader = SubResource("Shader_jjtco")
+shader_parameter/tinta = Color(1, 1, 1, 1)
+shader_parameter/bordo = 0.25
+shader_parameter/buio_bordo = 0.85
+shader_parameter/grana = 0.08
+shader_parameter/graffi = 0.5
+shader_parameter/flicker = 0.03
 
 [node name="SongList" type="Node" unique_id=19369253]
 script = ExtResource("1_6uq70")
@@ -216,8 +288,8 @@ livello = 3
 visible = false
 z_index = 10
 layout_mode = 2
-theme_override_styles/background = SubResource("StyleBoxEmpty_ff6bv")
-theme_override_styles/fill = SubResource("StyleBoxEmpty_v5n0t")
+theme_override_styles/background = SubResource("StyleBoxEmpty_jjtco")
+theme_override_styles/fill = SubResource("StyleBoxEmpty_4o3ff")
 step = 0.0
 value = 60.0
 show_percentage = false
@@ -265,13 +337,16 @@ theme_override_constants/margin_right = 5
 theme_override_constants/margin_bottom = 5
 
 [node name="TextureRect" type="TextureRect" parent="Control/VBoxContainer/CenterContainer/VBoxContainer/ImageReact" unique_id=87801007]
-material = SubResource("ShaderMaterial_ricob")
+material = SubResource("ShaderMaterial_lyhfc")
 custom_minimum_size = Vector2(330, 330)
 custom_maximum_size = Vector2(330, 330)
 layout_mode = 2
 texture = ExtResource("3_xjwt6")
 expand_mode = 1
 script = ExtResource("9_jjtco")
+bloccata = null
+cover_visibile = null
+cover_dim = null
 
 [node name="MarginContainer" type="MarginContainer" parent="Control/VBoxContainer/CenterContainer/VBoxContainer/ImageReact/TextureRect" unique_id=1858581179]
 layout_mode = 0
@@ -282,19 +357,28 @@ theme_override_constants/margin_top = 10
 theme_override_constants/margin_right = 10
 theme_override_constants/margin_bottom = 10
 
+[node name="CoverTitle" type="Label" parent="Control/VBoxContainer/CenterContainer/VBoxContainer/ImageReact/TextureRect/MarginContainer" unique_id=1365913552]
+z_index = 50
+custom_minimum_size = Vector2(330, 0)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.51955754, 0.51955754, 0.51955754, 1)
+theme_override_font_sizes/font_size = 55
+text = "Caricamento.."
+autowrap_mode = 3
+
 [node name="MarginContainer2" type="MarginContainer" parent="Control/VBoxContainer/CenterContainer/VBoxContainer" unique_id=205731464]
 layout_mode = 2
 
 [node name="VBoxContainer" type="HBoxContainer" parent="Control/VBoxContainer/CenterContainer/VBoxContainer/MarginContainer2" unique_id=311270300]
 layout_mode = 2
 
-[node name="testoProgresso" type="Label" parent="Control/VBoxContainer/CenterContainer/VBoxContainer/MarginContainer2/VBoxContainer" unique_id=351416467]
+[node name="DurataTotaleCanzone" type="Label" parent="Control/VBoxContainer/CenterContainer/VBoxContainer/MarginContainer2/VBoxContainer" unique_id=351416467]
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_colors/font_color = Color(0.056885824, 0.053413995, 0.013389518, 1)
 text = "01:30"
 
-[node name="testoProgressoNascosto" type="Label" parent="Control/VBoxContainer/CenterContainer/VBoxContainer/MarginContainer2/VBoxContainer" unique_id=314660912]
+[node name="NotePreseSuNoteTotali" type="Label" parent="Control/VBoxContainer/CenterContainer/VBoxContainer/MarginContainer2/VBoxContainer" unique_id=314660912]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.048869543, 0.09318248, 0.0071416106, 1)
 text = "5/120"
@@ -316,8 +400,8 @@ theme_override_constants/margin_bottom = -15
 custom_minimum_size = Vector2(50, 80)
 layout_mode = 2
 size_flags_horizontal = 3
-theme_override_styles/background = SubResource("StyleBoxEmpty_xexs3")
-theme_override_styles/fill = SubResource("StyleBoxEmpty_8vhm8")
+theme_override_styles/background = SubResource("StyleBoxEmpty_y4ned")
+theme_override_styles/fill = SubResource("StyleBoxEmpty_dxbyo")
 step = 50.0
 value = 50.0
 show_percentage = false
@@ -335,7 +419,28 @@ horizontal_alignment = 1
 layout_mode = 2
 theme_override_constants/margin_top = 0
 
-[node name="StartTrapSong" type="Button" parent="Control/VBoxContainer/CenterContainer/VBoxContainer/MarginContainer" unique_id=1725919161]
+[node name="HBoxContainer" type="VBoxContainer" parent="Control/VBoxContainer/CenterContainer/VBoxContainer/MarginContainer" unique_id=1740423275]
+layout_mode = 2
+
+[node name="SongQuee" type="Control" parent="Control/VBoxContainer/CenterContainer/VBoxContainer/MarginContainer/HBoxContainer" unique_id=1055216063]
+custom_minimum_size = Vector2(270, 10)
+layout_mode = 2
+size_flags_vertical = 8
+script = ExtResource("3_h4mvk")
+lettera = ""
+totale = 9
+larghezza_rombo = 30.0
+altezza_rombo = 10.0
+spazio = 0.0
+
+[node name="MarginContainer" type="MarginContainer" parent="Control/VBoxContainer/CenterContainer/VBoxContainer/MarginContainer/HBoxContainer" unique_id=1401071823]
+layout_mode = 2
+theme_override_constants/margin_left = 5
+theme_override_constants/margin_top = 5
+theme_override_constants/margin_right = 5
+theme_override_constants/margin_bottom = 5
+
+[node name="StartTrapSong" type="Button" parent="Control/VBoxContainer/CenterContainer/VBoxContainer/MarginContainer/HBoxContainer/MarginContainer" unique_id=1725919161]
 custom_minimum_size = Vector2(330, 0)
 custom_maximum_size = Vector2(330, -1)
 layout_mode = 2
@@ -351,7 +456,7 @@ text = "PLAY THIS SONG"
 flat = true
 alignment = 0
 
-[node name="HoverTrap" type="Node" parent="Control/VBoxContainer/CenterContainer/VBoxContainer/MarginContainer/StartTrapSong" unique_id=782730368]
+[node name="HoverTrap" type="Node" parent="Control/VBoxContainer/CenterContainer/VBoxContainer/MarginContainer/HBoxContainer/MarginContainer/StartTrapSong" unique_id=782730368]
 script = ExtResource("12_4o3ff")
 metadata/_custom_type_script = "uid://vlu14j1ensop"
 
@@ -379,6 +484,7 @@ offset_top = -74.0
 grow_horizontal = 0
 grow_vertical = 0
 offset_transform_enabled = true
+theme_override_font_sizes/font_size = 30
 theme_override_styles/normal = SubResource("StyleBoxEmpty_h4mvk")
 theme_override_styles/pressed = SubResource("StyleBoxEmpty_n6qt4")
 theme_override_styles/hover = SubResource("StyleBoxEmpty_dc8yc")
@@ -391,77 +497,15 @@ icon = ExtResource("6_gui8b")
 flat = true
 alignment = 2
 
-[node name="Control2" type="Control" parent="." unique_id=342703954]
-layout_mode = 3
-anchors_preset = 0
-offset_right = 40.0
-offset_bottom = 40.0
+[node name="Control2" type="ColorRect" parent="." unique_id=1201903268]
+z_index = -50
+material = SubResource("ShaderMaterial_4o3ff")
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
 script = ExtResource("9_n6qt4")
-
-[node name="Teppistello" type="CanvasLayer" parent="." unique_id=1732604197]
-
-[node name="Control2" type="Control" parent="Teppistello" unique_id=352621645]
-layout_mode = 3
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-mouse_filter = 2
-theme = ExtResource("1_d8hw3")
-
-[node name="MarginContainer" type="MarginContainer" parent="Teppistello/Control2" unique_id=610631385]
-z_index = 10
-layout_mode = 1
-anchors_preset = 7
-anchor_left = 0.5
-anchor_top = 1.0
-anchor_right = 0.5
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 0
-theme_override_constants/margin_bottom = 20
-
-[node name="Fumetto" type="PanelContainer" parent="Teppistello/Control2/MarginContainer" unique_id=1259667882 node_paths=PackedStringArray("Canvas_Padre", "Teppistello")]
-layout_mode = 2
-mouse_filter = 2
-script = ExtResource("16_ff6bv")
-Canvas_Padre = NodePath("../../..")
-Teppistello = NodePath("../../../Control/MarginContainer/Personaggio")
-font = ExtResource("17_v5n0t")
-dimensione_font = 35
-colore_neon = Color(0.5541121, 0, 0.10718591, 1)
-metadata/_custom_type_script = "uid://cq6p626un4475"
-
-[node name="Control" type="Control" parent="Teppistello" unique_id=28757246]
-layout_mode = 3
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-mouse_filter = 2
-
-[node name="MarginContainer" type="MarginContainer" parent="Teppistello/Control" unique_id=698818414]
-layout_mode = 1
-anchors_preset = 3
-anchor_left = 1.0
-anchor_top = 1.0
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_left = -320.0
-offset_top = -380.0
-grow_horizontal = 0
-grow_vertical = 0
-theme_override_constants/margin_bottom = -80
-
-[node name="Personaggio" type="Control" parent="Teppistello/Control/MarginContainer" unique_id=1935919794 node_paths=PackedStringArray("fumetto")]
-custom_minimum_size = Vector2(640, 760)
-layout_mode = 2
-mouse_filter = 2
-script = ExtResource("18_lyhfc")
-dimensione_personaggio = Vector2(540, 660)
-parla_all_avvio = true
-font = ExtResource("17_v5n0t")
-colore_testo = Color(0.25743568, 0.12456282, 0.08173273, 1)
-fumetto = NodePath("../../../Control2/MarginContainer/Fumetto")
+tinta = Color(1, 1, 1, 1)
+buio_bordo = 0.85

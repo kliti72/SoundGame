@@ -1,7 +1,11 @@
 Del gioco certo:
 
 - Rendere i background diversi per canzone
-- Dare Coerenza e sistemare l'interazione con il cap BRO
+- Togliere tepistello
+- Mettere veramente la difficoltà ai livelli.
+
+- Tepistello:
+	- Sistemare dimensioni e testi
 
 nome: Sound Of The Trap
 dominio: 
@@ -9,13 +13,9 @@ dominio:
 	soundofthetrap, 
 	gameoftrapsound, 
 	soundofgramtrap
-	
-	
+
 # refl
 
-Stavo sistemato il personaggio, la comunciazione, presetazione, cosa fa e cosa consiglia al player e la trama che segue.
-	
-	
 - Server http per tracciare i utenti quanti livelli sbloccano e che punto si ritrovano
 
 forse:
