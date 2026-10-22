@@ -5,7 +5,7 @@ extends Node
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	MusicaGlobale.start(2.5)
-	AvvioDTO.cattura().invia(self, "http://localhost:3000/api/avvii")
+	AvvioDTO.cattura().invia(self, "http://pvpshield.com:5353/api/avvii")
 	#await npc.parla(
 	#"benvenuto_ok", [
 		#"Yo! Fra!, Che ci fai da queste parti?", 
